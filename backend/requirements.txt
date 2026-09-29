@@ -1,0 +1,58 @@
+# Framework
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+python-multipart==0.0.12
+
+# Config & validation
+pydantic==2.9.2
+pydantic-settings==2.5.2
+python-dotenv==1.0.1
+
+# HTTP
+httpx==0.27.2
+requests==2.32.3
+
+# IA Providers
+groq==0.11.0
+google-generativeai==0.8.3
+mistralai==1.2.3
+cohere==5.11.4
+
+# Ingestion
+pypdf==5.0.1
+pdfplumber==0.11.4
+python-docx==1.1.2
+docx2txt==0.8
+odfpy==1.4.1
+striprtf==0.0.28
+beautifulsoup4==4.12.3
+markdown==3.7
+pytesseract==0.3.13
+Pillow==10.4.0
+
+# Detection langue
+langdetect==1.0.9
+
+# Base de donnees
+supabase==2.9.1
+asyncpg==0.30.0
+sqlalchemy==2.0.36
+
+# Cache
+redis==5.1.1
+
+# Paiement
+fedapay==0.4.0
+stripe==11.2.0
+
+# Emails
+brevo-python==1.2.0
+
+# Observabilite
+sentry-sdk[fastapi]==2.17.0
+structlog==24.4.0
+
+# Tests
+pytest==8.3.3
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
