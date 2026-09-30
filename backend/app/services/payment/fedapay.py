@@ -3,7 +3,7 @@
 import hashlib
 import hmac
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import httpx
 
@@ -93,31 +93,67 @@ class FedaPayProvider(PaymentProvider):
                     )
 
                 data = response.json()
-                transaction = data.get("v1", {}).get("transaction", data)
+
+                # ============================================================
+                # EXTRACTION ROBUSTE DE LA REPONSE FEDAPAY
+                # FedaPay utilise la cle "v1/transaction" (avec un slash),
+                # parfois "transaction", parfois la racine directement
+                # ============================================================
+                transaction: Dict[str, Any] = {}
+                if "v1/transaction" in data:
+                    transaction = data["v1/transaction"]
+                elif "v1" in data and isinstance(data["v1"], dict):
+                    v1 = data["v1"]
+                    if "transaction" in v1 and isinstance(v1["transaction"], dict):
+                        transaction = v1["transaction"]
+                    else:
+                        transaction = v1
+                elif "transaction" in data and isinstance(data["transaction"], dict):
+                    transaction = data["transaction"]
+                else:
+                    transaction = data
+
                 transaction_id = str(transaction.get("id", ""))
+                checkout_url = transaction.get("payment_url", "")
 
+                logger.info(
+                    "fedapay_response_parsed",
+                    transaction_id=transaction_id,
+                    has_payment_url=bool(checkout_url),
+                    data_keys=list(data.keys()),
+                    transaction_keys=list(transaction.keys()) if isinstance(transaction, dict) else [],
+                )
+
+                # Fallback : si pas de payment_url mais un ID, generer via /token
+                if not checkout_url and transaction_id:
+                    logger.info("fedapay_generating_token_fallback", transaction_id=transaction_id)
+                    token_url = f"{self._api_url()}/transactions/{transaction_id}/token"
+                    token_response = client.post(token_url, headers=self._headers())
+
+                    if token_response.status_code in (200, 201):
+                        token_data = token_response.json()
+                        token = token_data.get("token")
+                        if token:
+                            if self.settings.fedapay_env == "live":
+                                checkout_url = f"https://process.fedapay.com/{token}"
+                            else:
+                                checkout_url = f"https://sandbox-process.fedapay.com/{token}"
+
+                # Verifications finales
                 if not transaction_id:
-                    raise PaymentError(message="FedaPay n a pas retourne d ID de transaction.")
-
-                # Genere le lien de paiement
-                token_url = f"{self._api_url()}/transactions/{transaction_id}/token"
-                token_response = client.post(token_url, headers=self._headers())
-
-                if token_response.status_code not in (200, 201):
                     raise PaymentError(
-                        message="FedaPay n a pas pu generer le lien de paiement.",
-                        details={"body": token_response.text[:200]},
+                        message="FedaPay n a pas retourne d ID de transaction.",
+                        details={
+                            "data_keys": list(data.keys()),
+                            "transaction_keys": list(transaction.keys()) if isinstance(transaction, dict) else [],
+                        },
                     )
 
-                token_data = token_response.json()
-                token = token_data.get("token")
-
-                if not token:
-                    raise PaymentError(message="FedaPay n a pas retourne de token de paiement.")
-
-                checkout_url = f"https://process.fedapay.com/{token}"
-                if self.settings.fedapay_env == "sandbox":
-                    checkout_url = f"https://sandbox-process.fedapay.com/{token}"
+                if not checkout_url:
+                    raise PaymentError(
+                        message="FedaPay n a pas retourne d URL de paiement.",
+                        details={"transaction_keys": list(transaction.keys())},
+                    )
 
                 logger.info(
                     "fedapay_transaction_created",
@@ -165,6 +201,7 @@ class FedaPayProvider(PaymentProvider):
         except json.JSONDecodeError as e:
             raise PaymentError(message=f"Webhook FedaPay invalide : {str(e)}") from e
 
+        # FedaPay webhook : "entity" contient la transaction
         entity = payload_data.get("entity", {})
         event = payload_data.get("name", "")
 
@@ -181,6 +218,13 @@ class FedaPayProvider(PaymentProvider):
         }
         status = status_map.get(status_raw, PaymentStatus.PENDING)
 
+        # Extraire currency avec securite
+        currency_obj = entity.get("currency")
+        if isinstance(currency_obj, dict):
+            currency = currency_obj.get("iso", "XOF")
+        else:
+            currency = "XOF"
+
         logger.info(
             "fedapay_webhook_received",
             transaction_id=transaction_id,
@@ -193,7 +237,7 @@ class FedaPayProvider(PaymentProvider):
             provider_transaction_id=transaction_id,
             status=status,
             amount=float(entity.get("amount", 0)),
-            currency=(entity.get("currency") or {}).get("iso", "XOF") if isinstance(entity.get("currency"), dict) else "XOF",
+            currency=currency,
             metadata=entity.get("metadata", {}) or {},
             raw=payload_data,
         )
