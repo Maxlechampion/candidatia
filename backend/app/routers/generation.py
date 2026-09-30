@@ -1,14 +1,15 @@
-"""Router /api/generate — pipeline complet de generation de pack."""
+"""Router /api/generate — pipeline complet de generation de pack (protege par JWT)."""
 
 import os
-from typing import Optional
+from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
 from app.core.config import get_settings
 from app.core.errors import AppError, GenerationError, IngestionError
 from app.core.logging import get_logger
+from app.core.security import get_current_user
 from app.services.ai.orchestrator import get_orchestrator
 from app.services.ai.prompts import (
     get_cv_prompt,
@@ -16,10 +17,10 @@ from app.services.ai.prompts import (
     get_lettre_prompt,
     get_relance_prompt,
 )
+from app.services.auth.quota_service import check_quota
+from app.services.auth.user_service import consume_credit
 from app.services.generation.pack_builder import get_pack_builder
-from app.services.ingestion.detector import detect_content_type
 from app.services.ingestion.service import get_ingestion_service
-from app.services.language.detector import detect_language
 from app.services.language.locale_map import get_locale_conventions
 
 logger = get_logger("router.generation")
@@ -60,7 +61,7 @@ async def _extraire_entree(
     )
 
 
-@router.post("/generate", summary="Generer un pack complet de candidature")
+@router.post("/generate", summary="Generer un pack complet (JWT requis)")
 async def generate_pack(
     fichier_profil: Optional[UploadFile] = File(None),
     fichier_offre: Optional[UploadFile] = File(None),
@@ -69,26 +70,32 @@ async def generate_pack(
     output_language: str = Form("fr"),
     inclure_relance: bool = Form(False),
     relance_wait_days: int = Form(7),
+    user: Dict[str, Any] = Depends(get_current_user),
 ):
     """
-    Pipeline complet :
-    1. Ingestion du profil et de l offre
-    2. Detection langue + conventions culturelles
-    3. Generation CV structure (IA)
-    4. Generation Lettre + Guide + Relance (IA)
-    5. Assemblage des documents Word
-    6. Compression ZIP
+    Pipeline complet protege par JWT :
+    1. Verification du quota utilisateur
+    2. Ingestion du profil et de l offre
+    3. Generation CV + Lettre + Guide (IA)
+    4. Assemblage des documents Word
+    5. Compression ZIP
+    6. Decrement du credit
     7. Retour du ZIP telechargeable
     """
+    user_id = user["id"]
+    user_email = user.get("email", "unknown")
+
     logger.info(
         "generate_start",
+        user_id=user_id,
+        user_email=user_email,
         output_language=output_language,
-        inclure_relance=inclure_relance,
     )
 
-    # ============================================================
+    # 0. Verification du quota
+    check_quota(user_id)
+
     # 1. Extraction
-    # ============================================================
     profil = await _extraire_entree(fichier_profil, texte_profil, "Profil")
     offre = await _extraire_entree(fichier_offre, texte_offre, "Offre")
 
@@ -97,17 +104,13 @@ async def generate_pack(
     if len(offre) < 50:
         raise HTTPException(status_code=400, detail="Offre trop courte (min 50 caracteres).")
 
-    # ============================================================
     # 2. Conventions culturelles
-    # ============================================================
     locale = get_locale_conventions(output_language)
     logger.info("locale_resolved", language=output_language, country=locale.get("country"))
 
     orchestrator = get_orchestrator()
 
-    # ============================================================
     # 3. CV
-    # ============================================================
     try:
         sys_prompt, user_prompt = get_cv_prompt(profil, offre, locale, output_language)
         cv_data = orchestrator.generate_json(sys_prompt, user_prompt)
@@ -117,7 +120,6 @@ async def generate_pack(
         logger.exception("cv_generation_failed", error=str(e))
         raise HTTPException(status_code=502, detail=f"Erreur generation CV : {str(e)}")
 
-    # Contexte strategique pour harmoniser les autres documents
     coordonnees = cv_data.get("coordonnees", {})
     nom_candidat = coordonnees.get("nom_complet", "Candidat")
     analyse = cv_data.get("analyse", {})
@@ -129,9 +131,7 @@ async def generate_pack(
         f"Strategie: {analyse.get('strategie_candidature', '')}"
     )
 
-    # ============================================================
     # 4. Lettre
-    # ============================================================
     try:
         sys_prompt, user_prompt = get_lettre_prompt(cv_contexte, offre, locale, output_language)
         lettre_data = orchestrator.generate_json(sys_prompt, user_prompt)
@@ -139,9 +139,7 @@ async def generate_pack(
         logger.exception("lettre_generation_failed", error=str(e))
         raise HTTPException(status_code=502, detail=f"Erreur generation Lettre : {str(e)}")
 
-    # ============================================================
     # 5. Guide
-    # ============================================================
     try:
         sys_prompt, user_prompt = get_guide_prompt(cv_contexte, offre, locale, output_language)
         guide_data = orchestrator.generate_json(sys_prompt, user_prompt)
@@ -149,9 +147,7 @@ async def generate_pack(
         logger.exception("guide_generation_failed", error=str(e))
         raise HTTPException(status_code=502, detail=f"Erreur generation Guide : {str(e)}")
 
-    # ============================================================
     # 6. Relance (optionnel)
-    # ============================================================
     relance_data = None
     if inclure_relance:
         try:
@@ -173,9 +169,7 @@ async def generate_pack(
             logger.warning("relance_generation_failed", error=str(e))
             relance_data = None
 
-    # ============================================================
-    # 7. Assemblage des documents
-    # ============================================================
+    # 7. Assemblage
     try:
         builder = get_pack_builder()
         pack_name = f"Pack_{nom_candidat.replace(' ', '_')}"
@@ -191,14 +185,19 @@ async def generate_pack(
         logger.exception("pack_build_failed", error=str(e))
         raise HTTPException(status_code=500, detail=f"Erreur assemblage : {e.message}")
 
-    # ============================================================
-    # 8. Retour du ZIP
-    # ============================================================
+    # 8. Decrement du credit
+    try:
+        consume_credit(user_id)
+        logger.info("credit_consumed", user_id=user_id)
+    except Exception as e:
+        logger.warning("credit_consumption_failed", user_id=user_id, error=str(e))
+
+    # 9. Retour du ZIP
     zip_path = result["zip_path"]
     if not os.path.exists(zip_path):
         raise HTTPException(status_code=500, detail="Le ZIP n a pas ete cree.")
 
-    logger.info("generate_success", zip_path=zip_path, documents=len(result["documents"]))
+    logger.info("generate_success", user_id=user_id, zip_path=zip_path)
 
     return FileResponse(
         path=zip_path,
@@ -207,9 +206,9 @@ async def generate_pack(
     )
 
 
-@router.get("/generate/info", summary="Informations sur le pipeline de generation")
+@router.get("/generate/info", summary="Informations sur le pipeline")
 async def generate_info() -> dict:
-    """Retourne les informations sur le pipeline (langues supportees, PDF dispo)."""
+    """Endpoint public : retourne les infos du pipeline."""
     from app.services.generation.pdf_export import pdf_disponible
     from app.services.language.locale_map import list_supported_locales
 
@@ -217,4 +216,5 @@ async def generate_info() -> dict:
         "supported_languages": list_supported_locales(),
         "pdf_available": pdf_disponible(),
         "max_file_size_mb": get_settings().max_file_size_mb,
+        "auth_required": True,
     }

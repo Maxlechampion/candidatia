@@ -11,7 +11,7 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.core.logging import get_logger, setup_logging
 from app.core.telemetry import setup_sentry
-from app.routers import health, ingestion, generation
+from app.routers import health, ingestion, generation, auth, generations, quota
 
 
 @asynccontextmanager
@@ -96,6 +96,21 @@ def create_app() -> FastAPI:
 
 
     app.include_router(generation.router)
+
+
+
+    app.include_router(auth.router)
+
+
+
+
+    app.include_router(generations.router)
+
+
+
+
+
+    app.include_router(quota.router)
     
 
     return app
