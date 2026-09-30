@@ -1,5 +1,5 @@
 """CRUD utilisateurs + gestion des credits."""
-
+from uuid import uuid4
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
@@ -25,6 +25,7 @@ def create_user(email: str, password: str, full_name: Optional[str] = None) -> D
 
     # Inserer dans la DB
     user_data = {
+        "id": str(uuid4()),
         "email": email,
         "full_name": full_name,
         "password_hash": password_hash,
