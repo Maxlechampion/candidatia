@@ -8,6 +8,7 @@ Ce script :
   2. Se connecte
   3. Recupere le profil
   4. Recupere le quota
+  5. Affiche l email de test pour le nettoyage
 """
 
 import sys

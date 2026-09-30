@@ -4,6 +4,9 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
+markers = [
+    "integration: tests d'integration qui touchent la vraie DB",
+]
 
 [tool.ruff]
 line-length = 100
@@ -12,6 +15,3 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP", "B"]
 ignore = ["E501"]
-markers = [
-    "integration: tests d'intégration qui touchent la vraie DB",
-]
