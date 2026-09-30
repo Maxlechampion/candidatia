@@ -42,7 +42,7 @@ sqlalchemy==2.0.36
 redis==5.1.1
 
 # Paiement
-fedapay==0.4.0
+fedapay==0.3.0
 stripe==11.2.0
 
 # Emails

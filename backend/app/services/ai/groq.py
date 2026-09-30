@@ -12,7 +12,7 @@ logger = get_logger("ai.groq")
 
 class GroqProvider(AIProvider):
     name = "groq"
-    model = "llama-3.3-70b-versatile"
+    model = "openai/gpt-oss-120b"
 
     def __init__(self) -> None:
         self.settings = get_settings()
