@@ -1,0 +1,43 @@
+{
+  "common": {
+    "app_name": "CandidatIA",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "landing": {
+    "hero_title": "Generate your complete application pack in one click",
+    "hero_subtitle": "Optimized resume, cover letter, and interview guide, all AI-generated in seconds.",
+    "cta_primary": "Start for free",
+    "cta_secondary": "See a demo",
+    "features_title": "Everything you need to succeed",
+    "feature_cv_title": "STAR method resume",
+    "feature_cv_desc": "A structured resume using the STAR method to highlight your quantified achievements.",
+    "feature_lettre_title": "Cover letter",
+    "feature_lettre_desc": "A personalized letter tailored to each company culture.",
+    "feature_guide_title": "Interview guide",
+    "feature_guide_desc": "Prepare your interviews with likely questions and answer strategies."
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Sign up",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "full_name": "Full name",
+    "login_cta": "Sign in",
+    "register_cta": "Create account"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "generate": "Generate a pack",
+    "history": "History",
+    "relances": "Follow-ups",
+    "billing": "Billing",
+    "credits": "Remaining credits"
+  }
+}

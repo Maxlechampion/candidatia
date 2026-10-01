@@ -1,0 +1,43 @@
+{
+  "common": {
+    "app_name": "CandidatIA",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "success": "Succes",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer",
+    "delete": "Supprimer"
+  },
+  "landing": {
+    "hero_title": "Generez votre pack de candidature en 1 clic",
+    "hero_subtitle": "CV optimise, lettre de motivation et guide d entretien, tous generes par IA en quelques secondes.",
+    "cta_primary": "Commencer gratuitement",
+    "cta_secondary": "Voir une demo",
+    "features_title": "Tout ce dont vous avez besoin pour reussir",
+    "feature_cv_title": "CV methode STAR",
+    "feature_cv_desc": "Un CV structure avec la methode STAR pour valoriser vos realisations chiffrees.",
+    "feature_lettre_title": "Lettre de motivation",
+    "feature_lettre_desc": "Une lettre personnalisee et adaptee a la culture de chaque entreprise.",
+    "feature_guide_title": "Guide d entretien",
+    "feature_guide_desc": "Preparez vos entretiens avec des questions probables et des strategies de reponse."
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Deconnexion",
+    "email": "Email",
+    "password": "Mot de passe",
+    "full_name": "Nom complet",
+    "login_cta": "Se connecter",
+    "register_cta": "Creer un compte"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "generate": "Generer un pack",
+    "history": "Historique",
+    "relances": "Relances",
+    "billing": "Paiement",
+    "credits": "Credits restants"
+  }
+}

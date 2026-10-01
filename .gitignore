@@ -1,4 +1,4 @@
-# Python
+# ============ Python ============
 __pycache__/
 *.py[cod]
 *.so
@@ -16,34 +16,44 @@ dist/
 htmlcov/
 .coverage
 
-# Node
+# ============ Node ============
 node_modules/
 .next/
 out/
-*.log
-npm-debug.log*
-yarn-error.log*
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
 
-# Env
+# ============ Env ============
 .env
 .env.local
 .env.*.local
 !.env.example
+!.env.local.example
 
-# IDE / OS
+# ============ IDE / OS ============
 .vscode/
 .idea/
 *.swp
 .DS_Store
 Thumbs.db
 
-# Genere
+# ============ Généré ============
 fichiers_generes/
 *.zip
 *.docx
 *.pdf
+!scripts/**/*.docx
 
-# Secrets
+# ============ Secrets ============
 *.pem
 *.key
 secrets/
+
+# ============ Vercel ============
+.vercel
+
+# ============ Logs ============
+*.log
+npm-debug.log*
+yarn-error.log*
