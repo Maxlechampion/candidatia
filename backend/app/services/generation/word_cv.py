@@ -30,11 +30,73 @@ from app.services.generation.style import (
 
 logger = get_logger("generation.word_cv")
 
+# Traductions des titres CV par langue
+CV_TITLES = {
+    "fr": {
+        "competences": "Competences cles",
+        "experiences": "Experiences professionnelles",
+        "formation": "Formation",
+        "projets": "Projets",
+        "informations": "Informations complementaires",
+        "technical_label": "Techniques : ",
+        "soft_label": "Humaines : ",
+        "languages_label": "Langues : ",
+        "interests_label": "Centres d interet : ",
+    },
+    "en": {
+        "competences": "Key Skills",
+        "experiences": "Professional Experience",
+        "formation": "Education",
+        "projets": "Projects",
+        "informations": "Additional Information",
+        "technical_label": "Technical: ",
+        "soft_label": "Soft Skills: ",
+        "languages_label": "Languages: ",
+        "interests_label": "Interests: ",
+    },
+    "es": {
+        "competences": "Competencias clave",
+        "experiences": "Experiencia profesional",
+        "formation": "Formacion",
+        "projets": "Proyectos",
+        "informations": "Informacion adicional",
+        "technical_label": "Tecnicas: ",
+        "soft_label": "Habilidades: ",
+        "languages_label": "Idiomas: ",
+        "interests_label": "Intereses: ",
+    },
+    "de": {
+        "competences": "Schluesselqualifikationen",
+        "experiences": "Berufserfahrung",
+        "formation": "Ausbildung",
+        "projets": "Projekte",
+        "informations": "Zusaetzliche Informationen",
+        "technical_label": "Technisch: ",
+        "soft_label": "Sozial: ",
+        "languages_label": "Sprachen: ",
+        "interests_label": "Interessen: ",
+    },
+}
+
+
+def _get_cv_titles(locale: dict) -> dict:
+    """Retourne les titres CV selon la langue (fallback anglais)."""
+    language_code = "en"
+    if locale:
+        for key in ("language_code", "language", "code"):
+        
+            if key in locale and locale[key]:
+                language_code = str(locale[key]).lower()
+                break
+    return CV_TITLES.get(language_code, CV_TITLES["en"])
+
+
 
 class WordCVGenerator(DocumentGenerator):
     name = "word_cv"
 
     def build(self, data: Dict[str, Any], locale: Dict[str, Any]) -> Document:
+        titles = _get_cv_titles(locale)
         doc = Document()
         configurer_marges(doc)
         configurer_style_normal(doc)
@@ -118,11 +180,11 @@ class WordCVGenerator(DocumentGenerator):
         hum_skills = data.get("competences_humaines", [])
 
         if tech_skills or hum_skills:
-            ajouter_titre_section(doc, "Competences cles")
+            ajouter_titre_section(doc, titles["competences"])
 
             if tech_skills:
                 p = doc.add_paragraph()
-                r = p.add_run("Techniques : ")
+                r = p.add_run(titles["technical_label"])
                 r.bold = True
                 r.font.size = Pt(10)
                 p.add_run(", ".join(tech_skills))
@@ -130,7 +192,7 @@ class WordCVGenerator(DocumentGenerator):
 
             if hum_skills:
                 p = doc.add_paragraph()
-                r = p.add_run("Humaines : ")
+                r = p.add_run(titles["soft_label"])
                 r.bold = True
                 r.font.size = Pt(10)
                 p.add_run(", ".join(hum_skills))
@@ -141,7 +203,7 @@ class WordCVGenerator(DocumentGenerator):
         # ============================================================
         experiences = data.get("experiences", [])
         if experiences:
-            ajouter_titre_section(doc, "Experiences professionnelles")
+            ajouter_titre_section(doc, titles["experiences"])
 
             for exp in experiences:
                 # Ligne 1 : Poste + Entreprise
@@ -212,7 +274,7 @@ class WordCVGenerator(DocumentGenerator):
         # ============================================================
         formations = data.get("formations", [])
         if formations:
-            ajouter_titre_section(doc, "Formation")
+            ajouter_titre_section(doc, titles["formation"])
 
             for f in formations:
                 p = doc.add_paragraph(style="List Bullet")
@@ -241,7 +303,7 @@ class WordCVGenerator(DocumentGenerator):
         # ============================================================
         projets = data.get("projets", [])
         if projets:
-            ajouter_titre_section(doc, "Projets")
+            ajouter_titre_section(doc, titles["projets"])
 
             for proj in projets:
                 p = doc.add_paragraph(style="List Bullet")
@@ -272,11 +334,11 @@ class WordCVGenerator(DocumentGenerator):
         centres = data.get("centres_interet", [])
 
         if langues or centres:
-            ajouter_titre_section(doc, "Informations complementaires")
+            ajouter_titre_section(doc, titles["informations"])
 
             if langues:
                 p = doc.add_paragraph()
-                r = p.add_run("Langues : ")
+                r = p.add_run(titles["languages_label"])
                 r.bold = True
                 r.font.size = Pt(9)
                 p.add_run(", ".join(langues)).font.size = Pt(9)
@@ -284,7 +346,7 @@ class WordCVGenerator(DocumentGenerator):
 
             if centres:
                 p = doc.add_paragraph()
-                r = p.add_run("Centres d interet : ")
+                r = p.add_run(titles["interests_label"])
                 r.bold = True
                 r.font.size = Pt(9)
                 p.add_run(", ".join(centres)).font.size = Pt(9)

@@ -6,6 +6,7 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   setAuth: (user: User, token: string) => void;
+  setUser: (user: User) => void;
   clearAuth: () => void;
   hydrate: () => void;
 }
@@ -21,6 +22,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem("candidatia_user", JSON.stringify(user));
     }
     set({ user, token, isAuthenticated: true });
+  },
+
+  setUser: (user) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("candidatia_user", JSON.stringify(user));
+    }
+    set({ user });
   },
 
   clearAuth: () => {

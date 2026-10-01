@@ -23,6 +23,25 @@ from app.services.generation.style import (
 
 logger = get_logger("generation.word_lettre")
 
+# Traductions des titres lettre par langue
+LETTRE_TITLES = {
+    "fr": {"object_label": "Objet : "},
+    "en": {"object_label": "Subject: "},
+    "es": {"object_label": "Asunto: "},
+    "de": {"object_label": "Betreff: "},
+}
+
+
+def _get_lettre_titles(locale: dict) -> dict:
+    language_code = "en"
+    if locale:
+        for key in ("language_code", "language", "code"):
+            if key in locale and locale[key]:
+                language_code = str(locale[key]).lower()
+                break
+    return LETTRE_TITLES.get(language_code, LETTRE_TITLES["en"])
+
+
 
 class WordLettreGenerator(DocumentGenerator):
     name = "word_lettre"
@@ -69,7 +88,8 @@ class WordLettreGenerator(DocumentGenerator):
         objet = data.get("objet", "")
         if objet:
             p = doc.add_paragraph()
-            r = p.add_run("Objet : ")
+            titles = _get_lettre_titles(locale)
+            r = p.add_run(titles["object_label"])
             r.bold = True
             r.font.size = Pt(11)
             r.font.color.rgb = COULEUR_PRIMAIRE

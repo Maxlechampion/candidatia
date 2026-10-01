@@ -1,5 +1,5 @@
 """
-Generateur Word : Brouillon de relance apres candidature.
+Generateur Word : Brouillon de relance apres candidature (multilingue).
 
 Format email professionnel court, a envoyer manuellement par l utilisateur.
 """
@@ -21,10 +21,61 @@ from app.services.generation.style import (
 logger = get_logger("generation.word_relance")
 
 
+# ============================================================
+# TRADUCTIONS DES TITRES PAR LANGUE
+# ============================================================
+
+RELANCE_TITLES = {
+    "fr": {
+        "main_title": "BROUILLON DE RELANCE",
+        "company": "Entreprise",
+        "job": "Poste",
+        "delay": "Relance apres",
+        "days": "jours",
+    },
+    "en": {
+        "main_title": "FOLLOW-UP DRAFT",
+        "company": "Company",
+        "job": "Position",
+        "delay": "Follow-up after",
+        "days": "days",
+    },
+    "es": {
+        "main_title": "BORRADOR DE SEGUIMIENTO",
+        "company": "Empresa",
+        "job": "Puesto",
+        "delay": "Seguimiento despues de",
+        "days": "dias",
+    },
+    "de": {
+        "main_title": "NACHSCHREIBEN-ENTWURF",
+        "company": "Unternehmen",
+        "job": "Position",
+        "delay": "Nachfassen nach",
+        "days": "Tagen",
+    },
+}
+
+
+def _get_relance_titles(locale: Dict[str, Any]) -> Dict[str, str]:
+    """Retourne les titres selon la langue (fallback sur l anglais)."""
+    language_code = "en"
+
+    if locale:
+        for key in ("language_code", "language", "code"):
+            if key in locale and locale[key]:
+                language_code = str(locale[key]).lower()
+                break
+
+    return RELANCE_TITLES.get(language_code, RELANCE_TITLES["en"])
+
+
 class WordRelanceGenerator(DocumentGenerator):
     name = "word_relance"
 
     def build(self, data: Dict[str, Any], locale: Dict[str, Any]) -> Document:
+        titles = _get_relance_titles(locale)
+
         doc = Document()
         configurer_marges(doc, top=1.0, bottom=1.0, left=1.0, right=1.0)
         configurer_style_normal(doc, taille=11)
@@ -32,7 +83,7 @@ class WordRelanceGenerator(DocumentGenerator):
         # En-tete
         ajouter_paragraphe(
             doc,
-            "BROUILLON DE RELANCE",
+            titles["main_title"],
             taille=14,
             gras=True,
             couleur=COULEUR_PRIMAIRE,
@@ -44,11 +95,11 @@ class WordRelanceGenerator(DocumentGenerator):
         job = data.get("job_title", "")
         wait_days = data.get("wait_days", 7)
 
-        ajouter_paragraphe(doc, f"Entreprise : {company}", taille=10, espace_apres=2)
-        ajouter_paragraphe(doc, f"Poste : {job}", taille=10, espace_apres=2)
+        ajouter_paragraphe(doc, f"{titles['company']} : {company}", taille=10, espace_apres=2)
+        ajouter_paragraphe(doc, f"{titles['job']} : {job}", taille=10, espace_apres=2)
         ajouter_paragraphe(
             doc,
-            f"Relance apres : {wait_days} jours",
+            f"{titles['delay']} : {wait_days} {titles['days']}",
             taille=10,
             italique=True,
             espace_apres=16,
@@ -87,6 +138,7 @@ class WordRelanceGenerator(DocumentGenerator):
             company=company,
             job=job,
             wait_days=wait_days,
+            language_code=locale.get("language_code", "en") if locale else "en",
         )
 
         return doc

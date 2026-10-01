@@ -10,6 +10,7 @@ from typing import Any, Dict
 
 LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
     "fr": {
+        "language_code": "fr",
         "country": "FR",
         "language_name": "Francais",
         "cv_max_pages": 1,
@@ -22,6 +23,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel",
     },
     "en": {
+        "language_code": "en",
         "country": "US",
         "language_name": "English",
         "cv_max_pages": 1,
@@ -34,6 +36,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "direct_professionnel",
     },
     "es": {
+        "language_code": "es",
         "country": "ES",
         "language_name": "Espanol",
         "cv_max_pages": 2,
@@ -46,6 +49,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel",
     },
     "pt": {
+        "language_code": "pt",
         "country": "PT",
         "language_name": "Portugues",
         "cv_max_pages": 2,
@@ -58,6 +62,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel",
     },
     "de": {
+        "language_code": "de",
         "country": "DE",
         "language_name": "Deutsch",
         "cv_max_pages": 2,
@@ -70,6 +75,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "tres_formel",
     },
     "it": {
+        "language_code": "it",
         "country": "IT",
         "language_name": "Italiano",
         "cv_max_pages": 2,
@@ -82,6 +88,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel",
     },
     "nl": {
+        "language_code": "nl",
         "country": "NL",
         "language_name": "Nederlands",
         "cv_max_pages": 2,
@@ -94,6 +101,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "direct_professionnel",
     },
     "ar": {
+        "language_code": "ar",
         "country": "AE",
         "language_name": "Arabic",
         "cv_max_pages": 2,
@@ -106,6 +114,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel_respectueux",
     },
     "zh-cn": {
+        "language_code": "zh-cn",
         "country": "CN",
         "language_name": "Chinese (Simplified)",
         "cv_max_pages": 2,
@@ -118,6 +127,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "humble_respectueux",
     },
     "ja": {
+        "language_code": "ja",
         "country": "JP",
         "language_name": "Japanese",
         "cv_max_pages": 2,
@@ -130,6 +140,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "tres_formel_respectueux",
     },
     "ko": {
+        "language_code": "ko",
         "country": "KR",
         "language_name": "Korean",
         "cv_max_pages": 2,
@@ -142,6 +153,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel_respectueux",
     },
     "ru": {
+        "language_code": "ru",
         "country": "RU",
         "language_name": "Russian",
         "cv_max_pages": 2,
@@ -154,6 +166,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel",
     },
     "tr": {
+        "language_code": "tr",
         "country": "TR",
         "language_name": "Turkish",
         "cv_max_pages": 2,
@@ -166,6 +179,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel",
     },
     "hi": {
+        "language_code": "hi",
         "country": "IN",
         "language_name": "Hindi",
         "cv_max_pages": 2,
@@ -178,6 +192,7 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "tone": "formel_respectueux",
     },
     "wo": {
+        "language_code": "wo",
         "country": "SN",
         "language_name": "Wolof",
         "cv_max_pages": 1,
