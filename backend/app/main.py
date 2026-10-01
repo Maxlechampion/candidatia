@@ -11,7 +11,7 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.core.logging import get_logger, setup_logging
 from app.core.telemetry import setup_sentry
-from app.routers import health, ingestion, generation, auth, generations, quota, billing, webhooks, relance
+from app.routers import health, ingestion, generation, auth, generations, quota, billing, webhooks, relance, scheduler
 
 
 @asynccontextmanager
@@ -135,6 +135,16 @@ def create_app() -> FastAPI:
 
 
     app.include_router(relance.router)
+
+
+
+
+
+
+
+
+
+    app.include_router(scheduler.router)
     
 
     return app
