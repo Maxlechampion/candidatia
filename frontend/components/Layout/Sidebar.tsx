@@ -2,15 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { href: "/dashboard", label: "Tableau de bord", icon: "grid" },
-  { href: "/dashboard/generate", label: "Generer un pack", icon: "plus" },
-  { href: "/dashboard/history", label: "Historique", icon: "clock" },
-  { href: "/dashboard/relances", label: "Relances", icon: "bell" },
-  { href: "/dashboard/billing", label: "Paiement", icon: "credit-card" },
-];
 
 function Icon({ name }: { name: string }) {
   const icons: Record<string, JSX.Element> = {
@@ -52,6 +45,15 @@ function Icon({ name }: { name: string }) {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const t = useTranslations("dashboard");
+
+  const navItems = [
+    { href: "/dashboard", label: t("title"), icon: "grid" },
+    { href: "/dashboard/generate", label: t("generate"), icon: "plus" },
+    { href: "/dashboard/history", label: t("history"), icon: "clock" },
+    { href: "/dashboard/relances", label: t("relances"), icon: "bell" },
+    { href: "/dashboard/billing", label: t("billing"), icon: "credit-card" },
+  ];
 
   return (
     <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">

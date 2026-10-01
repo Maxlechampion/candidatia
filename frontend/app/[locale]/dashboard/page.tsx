@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
@@ -16,6 +17,8 @@ interface Stats {
 
 export default function DashboardHome() {
   const { user } = useAuthStore();
+  const t = useTranslations("dashboard");
+
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,18 +40,16 @@ export default function DashboardHome() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-dark mb-2">
-          Bonjour {user?.full_name || "!"}
+          {t("welcome")} {user?.full_name || "!"}
         </h1>
-        <p className="text-slate-600">
-          Pret a generer votre prochain pack de candidature ?
-        </p>
+        <p className="text-slate-600">{t("ready")}</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-slate-500">
-              Packs generes
+              {t("stat_packs")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -61,7 +62,7 @@ export default function DashboardHome() {
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-slate-500">
-              Score moyen
+              {t("stat_score")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -75,7 +76,7 @@ export default function DashboardHome() {
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-slate-500">
-              Credits restants
+              {t("stat_credits")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -91,14 +92,14 @@ export default function DashboardHome() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Actions rapides</CardTitle>
+          <CardTitle>{t("quick_actions")}</CardTitle>
         </CardHeader>
         <CardContent className="flex gap-3">
           <Link href="/dashboard/generate">
-            <Button>Generer un nouveau pack</Button>
+            <Button>{t("action_generate")}</Button>
           </Link>
           <Link href="/dashboard/history">
-            <Button variant="outline">Voir l'historique</Button>
+            <Button variant="outline">{t("action_history")}</Button>
           </Link>
         </CardContent>
       </Card>

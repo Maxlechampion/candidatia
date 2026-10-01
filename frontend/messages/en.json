@@ -7,20 +7,21 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "save": "Save",
-    "delete": "Delete"
+    "delete": "Delete",
+    "back_home": "Back to home"
   },
   "landing": {
-    "hero_title": "Generate your complete application pack in one click",
-    "hero_subtitle": "Optimized resume, cover letter, and interview guide, all AI-generated in seconds.",
+    "hero_title": "Generate your application pack in one click",
+    "hero_subtitle": "Optimized resume, cover letter and interview guide, all AI-generated in seconds.",
     "cta_primary": "Start for free",
     "cta_secondary": "See a demo",
     "features_title": "Everything you need to succeed",
     "feature_cv_title": "STAR method resume",
-    "feature_cv_desc": "A structured resume using the STAR method to highlight your quantified achievements.",
+    "feature_cv_desc": "A structured resume using the STAR method to showcase your quantified achievements.",
     "feature_lettre_title": "Cover letter",
-    "feature_lettre_desc": "A personalized letter tailored to each company culture.",
+    "feature_lettre_desc": "A personalized letter tailored to each company's culture.",
     "feature_guide_title": "Interview guide",
-    "feature_guide_desc": "Prepare your interviews with likely questions and answer strategies."
+    "feature_guide_desc": "Prepare for interviews with likely questions and answer strategies."
   },
   "auth": {
     "login": "Login",
@@ -34,10 +35,63 @@
   },
   "dashboard": {
     "title": "Dashboard",
+    "welcome": "Hello",
+    "ready": "Ready to generate your next application pack?",
     "generate": "Generate a pack",
     "history": "History",
     "relances": "Follow-ups",
     "billing": "Billing",
-    "credits": "Remaining credits"
+    "credits": "Remaining credits",
+    "stat_packs": "Generated packs",
+    "stat_score": "Average score",
+    "stat_credits": "Remaining credits",
+    "quick_actions": "Quick actions",
+    "action_generate": "Generate a new pack",
+    "action_history": "View history",
+    "loading_stats": "Loading statistics..."
+  },
+  "generate": {
+    "title": "Generate a pack",
+    "subtitle": "Upload your profile and the job offer to generate a complete pack.",
+    "step_profile": "1. Your profile",
+    "step_offer": "2. The job offer",
+    "step_language": "3. Generation language",
+    "file_label": "File (PDF, DOCX, TXT)",
+    "or_text": "OR",
+    "text_label": "Plain text",
+    "profile_placeholder": "Paste your resume or profile here...",
+    "offer_placeholder": "Paste the job offer here...",
+    "submit": "Generate my pack",
+    "submitting": "Generating...",
+    "generating_info": "AI generation in progress... This may take 30 to 60 seconds."
+  },
+  "relances": {
+    "title": "Follow-ups",
+    "subtitle": "Schedule reminders to follow up on your applications.",
+    "new": "New follow-up",
+    "empty": "No scheduled follow-ups.",
+    "empty_hint": "Click on \"New follow-up\" to get started.",
+    "status_pending": "Pending",
+    "status_reminded": "Reminder sent",
+    "status_sent": "Sent",
+    "status_cancelled": "Cancelled",
+    "view_draft": "View draft",
+    "hide_draft": "Hide draft",
+    "cancel": "Cancel",
+    "mark_sent": "Mark as sent",
+    "draft_label": "AI-generated draft:"
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Choose a plan and pay with Mobile Money, card or crypto.",
+    "plans_title": "Our plans",
+    "plans_loading": "Loading plans...",
+    "payment_methods": "Payment methods",
+    "no_providers": "No payment method available at the moment.",
+    "history_title": "Payment history",
+    "no_payments": "No payments yet.",
+    "current_plan": "Current plan",
+    "choose_plan": "Choose this plan",
+    "popular": "POPULAR"
   }
 }

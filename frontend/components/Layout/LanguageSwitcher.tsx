@@ -1,31 +1,24 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/navigation";
+import { useTransition } from "react";
 
 const LANGUAGES = [
-  { code: "fr", label: "FR", flag: "FR" },
-  { code: "en", label: "EN", flag: "EN" },
+  { code: "fr", label: "FR" },
+  { code: "en", label: "EN" },
 ];
 
 export function LanguageSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
 
   function switchLocale(newLocale: string) {
-    // Retirer le prefixe de langue actuel du pathname
-    let path = pathname;
-
-    // Retirer /en ou /fr au debut si present
-    if (path.startsWith(`/${locale}`)) {
-      path = path.substring(`/${locale}`.length);
-    }
-
-    // Construire le nouveau path
-    const newPath = newLocale === "fr" ? path || "/" : `/${newLocale}${path}`;
-
-    router.push(newPath);
+    startTransition(() => {
+      router.replace(pathname, { locale: newLocale });
+    });
   }
 
   return (
@@ -34,8 +27,9 @@ export function LanguageSwitcher() {
         <button
           key={lang.code}
           type="button"
+          disabled={isPending}
           onClick={() => switchLocale(lang.code)}
-          className={`px-2 py-1 text-xs font-medium rounded transition ${
+          className={`px-2 py-1 text-xs font-medium rounded transition disabled:opacity-50 ${
             locale === lang.code
               ? "bg-primary-100 text-primary-700"
               : "text-slate-500 hover:text-slate-700 hover:bg-slate-100"

@@ -7,11 +7,12 @@
     "cancel": "Annuler",
     "confirm": "Confirmer",
     "save": "Enregistrer",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "back_home": "Retour a l'accueil"
   },
   "landing": {
     "hero_title": "Generez votre pack de candidature en 1 clic",
-    "hero_subtitle": "CV optimise, lettre de motivation et guide d entretien, tous generes par IA en quelques secondes.",
+    "hero_subtitle": "CV optimise, lettre de motivation et guide d'entretien, tous generes par IA en quelques secondes.",
     "cta_primary": "Commencer gratuitement",
     "cta_secondary": "Voir une demo",
     "features_title": "Tout ce dont vous avez besoin pour reussir",
@@ -19,7 +20,7 @@
     "feature_cv_desc": "Un CV structure avec la methode STAR pour valoriser vos realisations chiffrees.",
     "feature_lettre_title": "Lettre de motivation",
     "feature_lettre_desc": "Une lettre personnalisee et adaptee a la culture de chaque entreprise.",
-    "feature_guide_title": "Guide d entretien",
+    "feature_guide_title": "Guide d'entretien",
     "feature_guide_desc": "Preparez vos entretiens avec des questions probables et des strategies de reponse."
   },
   "auth": {
@@ -34,10 +35,63 @@
   },
   "dashboard": {
     "title": "Tableau de bord",
+    "welcome": "Bonjour",
+    "ready": "Pret a generer votre prochain pack de candidature ?",
     "generate": "Generer un pack",
     "history": "Historique",
     "relances": "Relances",
     "billing": "Paiement",
-    "credits": "Credits restants"
+    "credits": "Credits restants",
+    "stat_packs": "Packs generes",
+    "stat_score": "Score moyen",
+    "stat_credits": "Credits restants",
+    "quick_actions": "Actions rapides",
+    "action_generate": "Generer un nouveau pack",
+    "action_history": "Voir l'historique",
+    "loading_stats": "Chargement des statistiques..."
+  },
+  "generate": {
+    "title": "Generer un pack",
+    "subtitle": "Uploadez votre profil et l'offre d'emploi pour generer un pack complet.",
+    "step_profile": "1. Votre profil",
+    "step_offer": "2. L'offre d'emploi",
+    "step_language": "3. Langue de generation",
+    "file_label": "Fichier (PDF, DOCX, TXT)",
+    "or_text": "OU",
+    "text_label": "Texte brut",
+    "profile_placeholder": "Collez ici votre CV ou profil...",
+    "offer_placeholder": "Collez ici l'offre d'emploi...",
+    "submit": "Generer mon pack",
+    "submitting": "Generation en cours...",
+    "generating_info": "Generation IA en cours... Cela peut prendre 30 a 60 secondes."
+  },
+  "relances": {
+    "title": "Relances",
+    "subtitle": "Programmez des rappels pour relancer vos candidatures.",
+    "new": "Nouvelle relance",
+    "empty": "Aucune relance programmee.",
+    "empty_hint": "Cliquez sur \"Nouvelle relance\" pour commencer.",
+    "status_pending": "En attente",
+    "status_reminded": "Rappel envoye",
+    "status_sent": "Envoyee",
+    "status_cancelled": "Annulee",
+    "view_draft": "Voir le brouillon",
+    "hide_draft": "Masquer le brouillon",
+    "cancel": "Annuler",
+    "mark_sent": "Marquer comme envoyee",
+    "draft_label": "Brouillon genere par IA :"
+  },
+  "billing": {
+    "title": "Paiement",
+    "subtitle": "Choisissez un plan et reglez par Mobile Money, carte ou crypto.",
+    "plans_title": "Nos plans",
+    "plans_loading": "Chargement des plans...",
+    "payment_methods": "Moyens de paiement",
+    "no_providers": "Aucun moyen de paiement disponible actuellement.",
+    "history_title": "Historique des paiements",
+    "no_payments": "Aucun paiement pour le moment.",
+    "current_plan": "Plan actuel",
+    "choose_plan": "Choisir ce plan",
+    "popular": "POPULAIRE"
   }
 }
