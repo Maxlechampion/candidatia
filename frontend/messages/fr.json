@@ -8,7 +8,9 @@
     "confirm": "Confirmer",
     "save": "Enregistrer",
     "delete": "Supprimer",
-    "back_home": "Retour a l'accueil"
+    "back_home": "Retour a l'accueil",
+    "or": "OU",
+    "pending": "En attente"
   },
   "landing": {
     "hero_title": "Generez votre pack de candidature en 1 clic",
@@ -31,7 +33,14 @@
     "password": "Mot de passe",
     "full_name": "Nom complet",
     "login_cta": "Se connecter",
-    "register_cta": "Creer un compte"
+    "register_cta": "Creer un compte",
+    "login_title": "Connexion",
+    "login_subtitle": "Accedez a votre tableau de bord",
+    "register_title": "Creer un compte",
+    "register_subtitle": "Commencez gratuitement avec 1 pack offert",
+    "no_account": "Pas encore de compte ?",
+    "already_account": "Deja un compte ?",
+    "password_hint": "Au moins 8 caracteres"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -57,13 +66,22 @@
     "step_offer": "2. L'offre d'emploi",
     "step_language": "3. Langue de generation",
     "file_label": "Fichier (PDF, DOCX, TXT)",
-    "or_text": "OU",
     "text_label": "Texte brut",
     "profile_placeholder": "Collez ici votre CV ou profil...",
     "offer_placeholder": "Collez ici l'offre d'emploi...",
     "submit": "Generer mon pack",
     "submitting": "Generation en cours...",
-    "generating_info": "Generation IA en cours... Cela peut prendre 30 a 60 secondes."
+    "generating_info": "Generation IA en cours... Cela peut prendre 30 a 60 secondes.",
+    "error_profile": "Fournissez votre profil (fichier ou texte).",
+    "error_offer": "Fournissez l'offre d'emploi (fichier ou texte)."
+  },
+  "history": {
+    "title": "Historique",
+    "subtitle": "Tous vos packs de candidature generes.",
+    "empty": "Aucun pack genere pour le moment.",
+    "empty_hint": "Rendez-vous dans \"Generer un pack\" pour commencer.",
+    "pack_label": "Pack en",
+    "score_label": "Score"
   },
   "relances": {
     "title": "Relances",
@@ -79,7 +97,18 @@
     "hide_draft": "Masquer le brouillon",
     "cancel": "Annuler",
     "mark_sent": "Marquer comme envoyee",
-    "draft_label": "Brouillon genere par IA :"
+    "draft_label": "Brouillon genere par IA :",
+    "scheduled_for": "Relance prevue le",
+    "days": "jours",
+    "confirm_cancel": "Annuler cette relance ?",
+    "confirm_sent": "Marquer comme envoyee ?",
+    "modal_title": "Programmer une relance",
+    "modal_company": "Entreprise",
+    "modal_job": "Poste",
+    "modal_delay": "Delai avant relance",
+    "modal_language": "Langue du brouillon",
+    "modal_submit": "Programmer",
+    "modal_loading": "Generation du brouillon en cours... (30 secondes)"
   },
   "billing": {
     "title": "Paiement",
@@ -87,11 +116,14 @@
     "plans_title": "Nos plans",
     "plans_loading": "Chargement des plans...",
     "payment_methods": "Moyens de paiement",
-    "no_providers": "Aucun moyen de paiement disponible actuellement.",
+    "no_providers": "Aucun moyen de paiement disponible actuellement. Configurez FedaPay dans le backend.",
     "history_title": "Historique des paiements",
     "no_payments": "Aucun paiement pour le moment.",
     "current_plan": "Plan actuel",
     "choose_plan": "Choisir ce plan",
-    "popular": "POPULAIRE"
+    "popular": "POPULAIRE",
+    "select_method": "Selectionnez un moyen de paiement.",
+    "error_payment": "Erreur de paiement.",
+    "packs_count": "pack(s) de candidature"
   }
 }

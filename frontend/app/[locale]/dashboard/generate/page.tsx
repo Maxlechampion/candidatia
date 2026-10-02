@@ -1,11 +1,12 @@
 "use client";
-import { useAuthStore } from "@/lib/store";
+
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/api";
+import { useAuthStore } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 
 const LANGUAGES = [
@@ -19,6 +20,7 @@ const LANGUAGES = [
 
 export default function GeneratePage() {
   const router = useRouter();
+  const t = useTranslations("generate");
 
   const [profilTexte, setProfilTexte] = useState("");
   const [offreTexte, setOffreTexte] = useState("");
@@ -40,12 +42,12 @@ export default function GeneratePage() {
     e.preventDefault();
     setError("");
 
-    if (!profilFile && !profilTexte) {
-      setError("Fournissez votre profil (fichier ou texte).");
+    if (!profilFile && !profilTexte.trim()) {
+      setError(t("error_profile"));
       return;
     }
-    if (!offreFile && !offreTexte) {
-      setError("Fournissez l'offre d'emploi (fichier ou texte).");
+    if (!offreFile && !offreTexte.trim()) {
+      setError(t("error_offer"));
       return;
     }
 
@@ -53,21 +55,20 @@ export default function GeneratePage() {
 
     try {
       const formData = new FormData();
-
       if (profilFile) formData.append("fichier_profil", profilFile);
-      if (profilTexte) formData.append("texte_profil", profilTexte);
+      else formData.append("texte_profil", profilTexte);
       if (offreFile) formData.append("fichier_offre", offreFile);
-      if (offreTexte) formData.append("texte_offre", offreTexte);
+      else formData.append("texte_offre", offreTexte);
 
       formData.append("output_language", language);
       formData.append("inclure_relance", "false");
+      formData.append("relance_wait_days", "7");
 
       const response = await api.post("/api/generate", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         responseType: "blob",
       });
 
-      // Telecharger le ZIP
       const blob = new Blob([response.data], { type: "application/zip" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -77,14 +78,24 @@ export default function GeneratePage() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-        // Rafraichir les infos utilisateur (credits)
-      const { data: userData } = await api.get("/api/auth/me");
-      useAuthStore.getState().setUser(userData);
+
+      try {
+        const { data: userData } = await api.get("/api/auth/me");
+        useAuthStore.getState().setUser(userData);
+      } catch {}
+
       router.push("/dashboard/history");
     } catch (err: any) {
-      const message =
-        err.response?.data?.detail ||
-        "Erreur lors de la generation.";
+      let message = "Erreur lors de la generation.";
+      try {
+        if (err.response?.data instanceof Blob) {
+          const text = await err.response.data.text();
+          const json = JSON.parse(text);
+          message = json.detail || message;
+        } else if (err.response?.data?.detail) {
+          message = err.response.data.detail;
+        }
+      } catch {}
       setError(message);
     } finally {
       setLoading(false);
@@ -94,10 +105,8 @@ export default function GeneratePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-dark mb-2">Generer un pack</h1>
-        <p className="text-slate-600">
-          Uploadez votre profil et l'offre d'emploi pour generer un pack complet.
-        </p>
+        <h1 className="text-3xl font-bold text-dark mb-2">{t("title")}</h1>
+        <p className="text-slate-600">{t("subtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -105,12 +114,12 @@ export default function GeneratePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>1. Votre profil</CardTitle>
+            <CardTitle>{t("step_profile")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Fichier (PDF, DOCX, TXT)
+                {t("file_label")}
               </label>
               <input
                 type="file"
@@ -118,23 +127,18 @@ export default function GeneratePage() {
                 onChange={handleProfilFile}
                 className="w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
               />
-              {profilFile && (
-                <p className="mt-2 text-xs text-emerald-600">
-                  Fichier selectionne : {profilFile.name}
-                </p>
-              )}
             </div>
 
-            <div className="text-center text-sm text-slate-400">OU</div>
+            <div className="text-center text-sm text-slate-400">{t("or_text") || "OU"}</div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Texte brut
+                {t("text_label")}
               </label>
               <textarea
                 value={profilTexte}
                 onChange={(e) => setProfilTexte(e.target.value)}
-                placeholder="Collez ici votre CV ou profil..."
+                placeholder={t("profile_placeholder")}
                 rows={6}
                 className="w-full px-4 py-2.5 text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
@@ -144,12 +148,12 @@ export default function GeneratePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>2. L'offre d'emploi</CardTitle>
+            <CardTitle>{t("step_offer")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Fichier (PDF, DOCX, TXT)
+                {t("file_label")}
               </label>
               <input
                 type="file"
@@ -157,23 +161,18 @@ export default function GeneratePage() {
                 onChange={handleOffreFile}
                 className="w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
               />
-              {offreFile && (
-                <p className="mt-2 text-xs text-emerald-600">
-                  Fichier selectionne : {offreFile.name}
-                </p>
-              )}
             </div>
 
-            <div className="text-center text-sm text-slate-400">OU</div>
+            <div className="text-center text-sm text-slate-400">{t("or_text") || "OU"}</div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Texte brut
+                {t("text_label")}
               </label>
               <textarea
                 value={offreTexte}
                 onChange={(e) => setOffreTexte(e.target.value)}
-                placeholder="Collez ici l'offre d'emploi..."
+                placeholder={t("offer_placeholder")}
                 rows={6}
                 className="w-full px-4 py-2.5 text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
@@ -183,7 +182,7 @@ export default function GeneratePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>3. Langue de generation</CardTitle>
+            <CardTitle>{t("step_language")}</CardTitle>
           </CardHeader>
           <CardContent>
             <select
@@ -202,14 +201,12 @@ export default function GeneratePage() {
 
         <div className="flex justify-end">
           <Button type="submit" loading={loading} size="lg">
-            {loading ? "Generation en cours..." : "Generer mon pack"}
+            {loading ? t("submitting") : t("submit")}
           </Button>
         </div>
 
         {loading && (
-          <Alert variant="info">
-            Generation IA en cours... Cela peut prendre 30 a 60 secondes.
-          </Alert>
+          <Alert variant="info">{t("generating_info")}</Alert>
         )}
       </form>
     </div>

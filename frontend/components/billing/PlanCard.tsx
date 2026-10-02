@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 export interface Plan {
@@ -20,18 +23,20 @@ export function PlanCard({
   onSelect: (code: string) => void;
   highlighted?: boolean;
 }) {
+  const t = useTranslations("billing");
+
   return (
     <div
       className={cn(
         "relative bg-white rounded-xl border p-6 transition",
         highlighted
           ? "border-primary-500 shadow-lg shadow-primary-500/20"
-          : "border-slate-200 hover:border-primary-300",
+          : "border-slate-200 hover:border-primary-300"
       )}
     >
       {highlighted && (
         <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold text-white bg-primary-600 rounded-full">
-          POPULAIRE
+          {t("popular")}
         </span>
       )}
 
@@ -41,21 +46,13 @@ export function PlanCard({
         <span className="text-slate-500 text-sm ml-1">EUR</span>
       </div>
       <p className="text-sm text-slate-500 mb-6">
-        {plan.credits} pack(s) de candidature
+        {plan.credits} {t("packs_count")}
       </p>
 
       <ul className="space-y-2 mb-6">
         {plan.features.map((feature, i) => (
           <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="text-emerald-500 shrink-0 mt-0.5"
-            >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-500 shrink-0 mt-0.5">
               <polyline points="20 6 9 17 4 12" />
             </svg>
             <span>{feature}</span>
@@ -72,10 +69,10 @@ export function PlanCard({
             ? "bg-slate-100 text-slate-400 cursor-not-allowed"
             : highlighted
             ? "bg-primary-600 text-white hover:bg-primary-700"
-            : "bg-slate-100 text-slate-700 hover:bg-slate-200",
+            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
         )}
       >
-        {isCurrentPlan ? "Plan actuel" : "Choisir ce plan"}
+        {isCurrentPlan ? t("current_plan") : t("choose_plan")}
       </button>
     </div>
   );

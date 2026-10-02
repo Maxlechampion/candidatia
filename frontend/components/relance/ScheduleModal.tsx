@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -17,6 +18,7 @@ export function ScheduleModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
+  const t = useTranslations("relances");
   const [companyName, setCompanyName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [waitDays, setWaitDays] = useState(7);
@@ -30,7 +32,6 @@ export function ScheduleModal({
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
       await api.post("/api/relance/schedule", {
         company_name: companyName,
@@ -38,7 +39,6 @@ export function ScheduleModal({
         wait_days: waitDays,
         language,
       });
-
       onSuccess();
       onClose();
     } catch (err: any) {
@@ -52,20 +52,15 @@ export function ScheduleModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
       <div className="bg-white rounded-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-dark">Programmer une relance</h2>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 text-2xl leading-none"
-          >
-            x
-          </button>
+          <h2 className="text-xl font-bold text-dark">{t("modal_title")}</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-2xl leading-none">x</button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <Alert variant="error">{error}</Alert>}
 
           <Input
-            label="Entreprise"
+            label={t("modal_company")}
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             placeholder="TechCorp"
@@ -73,7 +68,7 @@ export function ScheduleModal({
           />
 
           <Input
-            label="Poste"
+            label={t("modal_job")}
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
             placeholder="Developpeur Python Senior"
@@ -82,7 +77,7 @@ export function ScheduleModal({
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
-              Delai avant relance
+              {t("modal_delay")}
             </label>
             <select
               value={waitDays}
@@ -90,16 +85,14 @@ export function ScheduleModal({
               className="w-full px-4 py-2.5 text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               {WAIT_OPTIONS.map((d) => (
-                <option key={d} value={d}>
-                  {d} jours
-                </option>
+                <option key={d} value={d}>{d} {t("days")}</option>
               ))}
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
-              Langue du brouillon
+              {t("modal_language")}
             </label>
             <select
               value={language}
@@ -114,18 +107,14 @@ export function ScheduleModal({
 
           <div className="flex gap-3 pt-2">
             <Button type="button" variant="secondary" onClick={onClose} className="flex-1">
-              Annuler
+              {t("cancel")}
             </Button>
             <Button type="submit" loading={loading} className="flex-1">
-              Programmer
+              {t("modal_submit")}
             </Button>
           </div>
 
-          {loading && (
-            <Alert variant="info">
-              Generation du brouillon en cours... (30 secondes)
-            </Alert>
-          )}
+          {loading && <Alert variant="info">{t("modal_loading")}</Alert>}
         </form>
       </div>
     </div>

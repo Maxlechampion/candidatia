@@ -8,7 +8,9 @@
     "confirm": "Confirm",
     "save": "Save",
     "delete": "Delete",
-    "back_home": "Back to home"
+    "back_home": "Back to home",
+    "or": "OR",
+    "pending": "Pending"
   },
   "landing": {
     "hero_title": "Generate your application pack in one click",
@@ -31,7 +33,14 @@
     "password": "Password",
     "full_name": "Full name",
     "login_cta": "Sign in",
-    "register_cta": "Create account"
+    "register_cta": "Create account",
+    "login_title": "Login",
+    "login_subtitle": "Access your dashboard",
+    "register_title": "Create account",
+    "register_subtitle": "Start for free with 1 pack included",
+    "no_account": "No account yet?",
+    "already_account": "Already have an account?",
+    "password_hint": "At least 8 characters"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -57,13 +66,22 @@
     "step_offer": "2. The job offer",
     "step_language": "3. Generation language",
     "file_label": "File (PDF, DOCX, TXT)",
-    "or_text": "OR",
     "text_label": "Plain text",
     "profile_placeholder": "Paste your resume or profile here...",
     "offer_placeholder": "Paste the job offer here...",
     "submit": "Generate my pack",
     "submitting": "Generating...",
-    "generating_info": "AI generation in progress... This may take 30 to 60 seconds."
+    "generating_info": "AI generation in progress... This may take 30 to 60 seconds.",
+    "error_profile": "Provide your profile (file or text).",
+    "error_offer": "Provide the job offer (file or text)."
+  },
+  "history": {
+    "title": "History",
+    "subtitle": "All your generated application packs.",
+    "empty": "No pack generated yet.",
+    "empty_hint": "Go to \"Generate a pack\" to get started.",
+    "pack_label": "Pack in",
+    "score_label": "Score"
   },
   "relances": {
     "title": "Follow-ups",
@@ -79,7 +97,18 @@
     "hide_draft": "Hide draft",
     "cancel": "Cancel",
     "mark_sent": "Mark as sent",
-    "draft_label": "AI-generated draft:"
+    "draft_label": "AI-generated draft:",
+    "scheduled_for": "Follow-up scheduled for",
+    "days": "days",
+    "confirm_cancel": "Cancel this follow-up?",
+    "confirm_sent": "Mark as sent?",
+    "modal_title": "Schedule a follow-up",
+    "modal_company": "Company",
+    "modal_job": "Position",
+    "modal_delay": "Delay before follow-up",
+    "modal_language": "Draft language",
+    "modal_submit": "Schedule",
+    "modal_loading": "Generating draft... (30 seconds)"
   },
   "billing": {
     "title": "Billing",
@@ -87,11 +116,14 @@
     "plans_title": "Our plans",
     "plans_loading": "Loading plans...",
     "payment_methods": "Payment methods",
-    "no_providers": "No payment method available at the moment.",
+    "no_providers": "No payment method available at the moment. Configure FedaPay in the backend.",
     "history_title": "Payment history",
     "no_payments": "No payments yet.",
     "current_plan": "Current plan",
     "choose_plan": "Choose this plan",
-    "popular": "POPULAR"
+    "popular": "POPULAR",
+    "select_method": "Select a payment method.",
+    "error_payment": "Payment error.",
+    "packs_count": "application pack(s)"
   }
 }

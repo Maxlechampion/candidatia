@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { api, AuthResponse } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { AuthLayout } from "@/components/Layout/AuthLayout";
@@ -12,6 +13,7 @@ import { Alert } from "@/components/ui/Alert";
 
 export default function LoginPage() {
   const router = useRouter();
+  const t = useTranslations("auth");
   const setAuth = useAuthStore((s) => s.setAuth);
 
   const [email, setEmail] = useState("");
@@ -29,13 +31,10 @@ export default function LoginPage() {
         email,
         password,
       });
-
       setAuth(data.user, data.access_token);
       router.push("/dashboard");
     } catch (err: any) {
-      const message =
-        err.response?.data?.detail ||
-        "Erreur de connexion. Verifiez vos identifiants.";
+      const message = err.response?.data?.detail || "Erreur de connexion.";
       setError(message);
     } finally {
       setLoading(false);
@@ -43,12 +42,12 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthLayout title="Connexion" subtitle="Accedez a votre tableau de bord">
+    <AuthLayout title={t("login_title")} subtitle={t("login_subtitle")}>
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && <Alert variant="error">{error}</Alert>}
 
         <Input
-          label="Email"
+          label={t("email")}
           type="email"
           name="email"
           placeholder="votre@email.com"
@@ -59,10 +58,10 @@ export default function LoginPage() {
         />
 
         <Input
-          label="Mot de passe"
+          label={t("password")}
           type="password"
           name="password"
-          placeholder="••••••••"
+          placeholder="********"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -70,13 +69,13 @@ export default function LoginPage() {
         />
 
         <Button type="submit" loading={loading} className="w-full" size="lg">
-          Se connecter
+          {t("login_cta")}
         </Button>
 
         <p className="text-center text-sm text-slate-600 pt-2">
-          Pas encore de compte ?{" "}
+          {t("no_account")}{" "}
           <Link href="/register" className="font-semibold text-primary-600 hover:underline">
-            Creer un compte
+            {t("register_cta")}
           </Link>
         </p>
       </form>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Alert } from "@/components/ui/Alert";
@@ -14,6 +15,7 @@ interface Generation {
 }
 
 export default function HistoryPage() {
+  const t = useTranslations("history");
   const [generations, setGenerations] = useState<Generation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -35,25 +37,23 @@ export default function HistoryPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-dark mb-2">Historique</h1>
-        <p className="text-slate-600">Tous vos packs de candidature generes.</p>
+        <h1 className="text-3xl font-bold text-dark mb-2">{t("title")}</h1>
+        <p className="text-slate-600">{t("subtitle")}</p>
       </div>
 
       {error && <Alert variant="error">{error}</Alert>}
 
       <Card>
         <CardHeader>
-          <CardTitle>{generations.length} pack(s) genere(s)</CardTitle>
+          <CardTitle>{generations.length} {t("title").toLowerCase()}</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
             <p className="text-slate-500 text-sm">Chargement...</p>
           ) : generations.length === 0 ? (
             <div className="text-center py-8 text-slate-500">
-              <p className="mb-2">Aucun pack genere pour le moment.</p>
-              <p className="text-sm">
-                Rendez-vous dans "Generer un pack" pour commencer.
-              </p>
+              <p className="mb-2">{t("empty")}</p>
+              <p className="text-sm">{t("empty_hint")}</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -64,16 +64,16 @@ export default function HistoryPage() {
                 >
                   <div>
                     <p className="font-medium text-slate-700">
-                      Pack en {gen.output_language.toUpperCase()}
+                      {t("pack_label")} {gen.output_language.toUpperCase()}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {new Date(gen.created_at).toLocaleString("fr-FR")}
+                      {new Date(gen.created_at).toLocaleString()}
                     </p>
                   </div>
                   <div className="text-right">
                     {gen.score_matching && (
                       <p className="text-sm font-bold text-primary-600">
-                        Score : {gen.score_matching}/100
+                        {t("score_label")} : {gen.score_matching}/100
                       </p>
                     )}
                     <p className="text-xs text-slate-500">{gen.status}</p>

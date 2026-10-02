@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
@@ -8,6 +9,7 @@ import { RelanceCard, Relance } from "@/components/relance/RelanceCard";
 import { ScheduleModal } from "@/components/relance/ScheduleModal";
 
 export default function RelancesPage() {
+  const t = useTranslations("relances");
   const [relances, setRelances] = useState<Relance[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,7 +31,7 @@ export default function RelancesPage() {
   }, []);
 
   async function handleCancel(id: string) {
-    if (!confirm("Annuler cette relance ?")) return;
+    if (!confirm(t("confirm_cancel"))) return;
     try {
       await api.post(`/api/relance/${id}/cancel`);
       load();
@@ -39,7 +41,7 @@ export default function RelancesPage() {
   }
 
   async function handleMarkSent(id: string) {
-    if (!confirm("Marquer comme envoyee ?")) return;
+    if (!confirm(t("confirm_sent"))) return;
     try {
       await api.post(`/api/relance/${id}/mark-sent`);
       load();
@@ -52,12 +54,10 @@ export default function RelancesPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-dark mb-2">Relances</h1>
-          <p className="text-slate-600">
-            Programmez des rappels pour relancer vos candidatures.
-          </p>
+          <h1 className="text-3xl font-bold text-dark mb-2">{t("title")}</h1>
+          <p className="text-slate-600">{t("subtitle")}</p>
         </div>
-        <Button onClick={() => setShowModal(true)}>Nouvelle relance</Button>
+        <Button onClick={() => setShowModal(true)}>{t("new")}</Button>
       </div>
 
       {error && <Alert variant="error">{error}</Alert>}
@@ -66,10 +66,8 @@ export default function RelancesPage() {
         <p className="text-slate-500 text-sm">Chargement...</p>
       ) : relances.length === 0 ? (
         <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
-          <p className="text-slate-500 mb-2">Aucune relance programmee.</p>
-          <p className="text-sm text-slate-400">
-            Cliquez sur "Nouvelle relance" pour commencer.
-          </p>
+          <p className="text-slate-500 mb-2">{t("empty")}</p>
+          <p className="text-sm text-slate-400">{t("empty_hint")}</p>
         </div>
       ) : (
         <div className="space-y-4">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -19,6 +20,7 @@ interface Payment {
 }
 
 export default function BillingPage() {
+  const t = useTranslations("billing");
   const { user } = useAuthStore();
 
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -38,14 +40,10 @@ export default function BillingPage() {
           api.get("/api/billing/payments"),
           api.get("/api/auth/me"),
         ]);
-
-        // Rafraichir les infos utilisateur (credits, plan)
         useAuthStore.getState().setUser(meRes.data);
-
         setPlans(plansRes.data.plans);
         setProviders(providersRes.data.providers);
         setPayments(paymentsRes.data);
-
         if (providersRes.data.providers.length > 0) {
           setSelectedProvider(providersRes.data.providers[0]);
         }
@@ -60,23 +58,19 @@ export default function BillingPage() {
 
   async function handleCheckout(planCode: string) {
     if (!selectedProvider) {
-      setError("Selectionnez un moyen de paiement.");
+      setError(t("select_method"));
       return;
     }
-
     setError("");
     setCheckingOut(true);
-
     try {
       const { data } = await api.post("/api/billing/checkout", {
         plan_code: planCode,
         provider: selectedProvider,
       });
-
-      // Rediriger vers la page de paiement
       window.location.href = data.checkout_url;
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Erreur de paiement.");
+      setError(err.response?.data?.detail || t("error_payment"));
       setCheckingOut(false);
     }
   }
@@ -84,18 +78,16 @@ export default function BillingPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-dark mb-2">Paiement</h1>
-        <p className="text-slate-600">
-          Choisissez un plan et reglez par Mobile Money, carte ou crypto.
-        </p>
+        <h1 className="text-3xl font-bold text-dark mb-2">{t("title")}</h1>
+        <p className="text-slate-600">{t("subtitle")}</p>
       </div>
 
       {error && <Alert variant="error">{error}</Alert>}
 
       <div>
-        <h2 className="text-xl font-bold text-dark mb-4">Nos plans</h2>
+        <h2 className="text-xl font-bold text-dark mb-4">{t("plans_title")}</h2>
         {loading ? (
-          <p className="text-slate-500 text-sm">Chargement des plans...</p>
+          <p className="text-slate-500 text-sm">{t("plans_loading")}</p>
         ) : (
           <div className="grid md:grid-cols-3 gap-6">
             {plans.map((plan) => (
@@ -113,13 +105,11 @@ export default function BillingPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Moyens de paiement</CardTitle>
+          <CardTitle>{t("payment_methods")}</CardTitle>
         </CardHeader>
         <CardContent>
           {providers.length === 0 ? (
-            <Alert variant="info">
-              Aucun moyen de paiement disponible actuellement. Configurez FedaPay dans le backend.
-            </Alert>
+            <Alert variant="info">{t("no_providers")}</Alert>
           ) : (
             <PaymentMethods
               availableProviders={providers}
@@ -132,12 +122,12 @@ export default function BillingPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Historique des paiements</CardTitle>
+          <CardTitle>{t("history_title")}</CardTitle>
         </CardHeader>
         <CardContent>
           {payments.length === 0 ? (
             <p className="text-slate-500 text-sm text-center py-4">
-              Aucun paiement pour le moment.
+              {t("no_payments")}
             </p>
           ) : (
             <div className="space-y-2">
@@ -151,7 +141,7 @@ export default function BillingPage() {
                       Plan {p.plan_purchased}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {new Date(p.created_at).toLocaleString("fr-FR")}
+                      {new Date(p.created_at).toLocaleString()}
                     </p>
                   </div>
                   <div className="text-right">

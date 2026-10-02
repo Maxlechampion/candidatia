@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +10,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header() {
   const router = useRouter();
+  const t = useTranslations("auth");
   const { user, clearAuth, hydrate, setUser } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
@@ -17,19 +19,14 @@ export function Header() {
     setMounted(true);
   }, [hydrate]);
 
-  // Rafraichir les infos utilisateur (credits, plan)
   useEffect(() => {
     if (!mounted) return;
-
     async function refreshUser() {
       try {
         const { data } = await api.get("/api/auth/me");
         setUser(data);
-      } catch {
-        // ignore silencieusement
-      }
+      } catch {}
     }
-
     refreshUser();
   }, [mounted, setUser]);
 
@@ -56,7 +53,7 @@ export function Header() {
               </p>
             </div>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
-              Deconnexion
+              {t("logout")}
             </Button>
           </>
         )}
