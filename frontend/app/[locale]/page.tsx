@@ -1,9 +1,52 @@
 import { useTranslations } from "next-intl";
+import { unstable_setRequestLocale } from "next-intl/server";
 import Link from "next/link";
 import { LandingFooter } from "@/components/Layout/LandingFooter";
 
-export default function HomePage() {
+export default function HomePage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
+
   const t = useTranslations("landing");
+
+  const features = [
+    { title: t("feature_cv_title"), desc: t("feature_cv_desc"), icon: "[CV]" },
+    { title: t("feature_lettre_title"), desc: t("feature_lettre_desc"), icon: "[Lettre]" },
+    { title: t("feature_guide_title"), desc: t("feature_guide_desc"), icon: "[Guide]" },
+  ];
+
+  const steps = [
+    { step: "1", title: t("how_step1_title"), desc: t("how_step1_desc") },
+    { step: "2", title: t("how_step2_title"), desc: t("how_step2_desc") },
+    { step: "3", title: t("how_step3_title"), desc: t("how_step3_desc") },
+  ];
+
+  const plans = [
+    {
+      name: t("plan_free_name"),
+      price: "0",
+      features: [t("plan_free_f1"), t("plan_free_f2"), t("plan_free_f3")],
+      cta: t("plan_free_cta"),
+      highlighted: false,
+    },
+    {
+      name: t("plan_essentiel_name"),
+      price: "4.99",
+      features: [t("plan_essentiel_f1"), t("plan_essentiel_f2"), t("plan_essentiel_f3")],
+      cta: t("plan_essentiel_cta"),
+      highlighted: false,
+    },
+    {
+      name: t("plan_pro_name"),
+      price: "14.99",
+      features: [t("plan_pro_f1"), t("plan_pro_f2"), t("plan_pro_f3"), t("plan_pro_f4")],
+      cta: t("plan_pro_cta"),
+      highlighted: true,
+    },
+  ];
 
   return (
     <main className="min-h-screen bg-white">
@@ -17,13 +60,13 @@ export default function HomePage() {
               href="/login"
               className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-primary-600 transition"
             >
-              Connexion
+              {t("nav_login")}
             </Link>
             <Link
               href="/register"
               className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition"
             >
-              Inscription
+              {t("nav_register")}
             </Link>
           </nav>
         </div>
@@ -31,7 +74,7 @@ export default function HomePage() {
 
       <section className="container-main py-20 md:py-28 text-center">
         <span className="inline-block px-3 py-1 text-xs font-bold text-primary-700 bg-primary-50 rounded-full mb-6">
-          NOUVEAU - Generateur de packs IA
+          {t("badge_new")}
         </span>
         <h1 className="text-4xl md:text-6xl font-bold text-dark mb-6 leading-tight">
           {t("hero_title")}
@@ -56,13 +99,13 @@ export default function HomePage() {
 
         <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-slate-500">
           <div className="flex items-center gap-2">
-            <span className="text-emerald-500">OK</span> Sans carte bancaire
+            <span className="text-emerald-500">OK</span> {t("trust_no_card")}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-emerald-500">OK</span> 1 pack offert
+            <span className="text-emerald-500">OK</span> {t("trust_free_pack")}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-emerald-500">OK</span> Resultats en 30 secondes
+            <span className="text-emerald-500">OK</span> {t("trust_fast")}
           </div>
         </div>
       </section>
@@ -72,16 +115,11 @@ export default function HomePage() {
           {t("features_title")}
         </h2>
         <p className="text-center text-slate-600 max-w-2xl mx-auto mb-12">
-          Tout ce dont vous avez besoin pour reussir votre candidature,
-          dans un seul pack genere automatiquement.
+          {t("features_subtitle")}
         </p>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {[
-            { title: t("feature_cv_title"), desc: t("feature_cv_desc"), icon: "[CV]" },
-            { title: t("feature_lettre_title"), desc: t("feature_lettre_desc"), icon: "[Lettre]" },
-            { title: t("feature_guide_title"), desc: t("feature_guide_desc"), icon: "[Guide]" },
-          ].map((feature, i) => (
+          {features.map((feature, i) => (
             <div
               key={i}
               className="p-6 bg-white rounded-xl border border-slate-200 hover:border-primary-300 hover:shadow-lg transition"
@@ -97,15 +135,11 @@ export default function HomePage() {
       <section id="how" className="bg-slate-50 py-16 md:py-24">
         <div className="container-main">
           <h2 className="text-3xl md:text-4xl font-bold text-dark text-center mb-12">
-            Comment ca marche ?
+            {t("how_title")}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {[
-              { step: "1", title: "Uploadez votre profil", desc: "CV, LinkedIn ou texte brut. Nous acceptons tous les formats." },
-              { step: "2", title: "Ajoutez l offre cible", desc: "Collez l offre d emploi ou uploadez le PDF." },
-              { step: "3", title: "Recevez votre pack", desc: "CV optimise, lettre personnalisee et guide d entretien en 30 secondes." },
-            ].map((item, i) => (
+            {steps.map((item, i) => (
               <div key={i} className="text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-600 text-white flex items-center justify-center text-2xl font-bold">
                   {item.step}
@@ -120,36 +154,14 @@ export default function HomePage() {
 
       <section id="pricing" className="container-main py-16 md:py-24">
         <h2 className="text-3xl md:text-4xl font-bold text-dark text-center mb-4">
-          Tarifs simples et transparents
+          {t("pricing_title")}
         </h2>
         <p className="text-center text-slate-600 max-w-2xl mx-auto mb-12">
-          Commencez gratuitement, payez seulement quand vous en avez besoin.
+          {t("pricing_subtitle")}
         </p>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {[
-            {
-              name: "Decouverte",
-              price: "0",
-              features: ["1 pack offert", "CV + Lettre + Guide", "Sans engagement"],
-              cta: "Commencer gratuitement",
-              highlighted: false,
-            },
-            {
-              name: "Essentiel",
-              price: "4.99",
-              features: ["5 packs", "Sans filigrane", "Support email"],
-              cta: "Choisir Essentiel",
-              highlighted: false,
-            },
-            {
-              name: "Pro",
-              price: "14.99",
-              features: ["30 packs/mois", "Simulateur entretien", "Suivi candidatures", "Support prioritaire"],
-              cta: "Choisir Pro",
-              highlighted: true,
-            },
-          ].map((plan, i) => (
+          {plans.map((plan, i) => (
             <div
               key={i}
               className={`relative p-6 rounded-xl border-2 ${
@@ -158,7 +170,7 @@ export default function HomePage() {
             >
               {plan.highlighted && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold text-white bg-primary-600 rounded-full">
-                  POPULAIRE
+                  {t("plan_popular")}
                 </span>
               )}
               <h3 className="text-lg font-bold text-dark mb-2">{plan.name}</h3>
@@ -192,16 +204,16 @@ export default function HomePage() {
       <section className="bg-gradient-to-br from-dark to-primary-900 py-16 md:py-24">
         <div className="container-main text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Pret a decrocher votre prochain emploi ?
+            {t("cta_final_title")}
           </h2>
           <p className="text-primary-100 max-w-2xl mx-auto mb-8">
-            Rejoignez des milliers de candidats qui ont optimise leur candidature avec CandidatIA.
+            {t("cta_final_subtitle")}
           </p>
           <Link
             href="/register"
             className="inline-block px-8 py-3 text-base font-semibold text-primary-700 bg-white rounded-lg hover:bg-primary-50 transition"
           >
-            Generer mon premier pack gratuit
+            {t("cta_final_button")}
           </Link>
         </div>
       </section>

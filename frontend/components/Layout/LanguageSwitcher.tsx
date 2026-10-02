@@ -4,7 +4,9 @@ import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/navigation";
 import { useTransition } from "react";
 
-const LANGUAGES = [
+type Locale = "fr" | "en";
+
+const LANGUAGES: readonly { code: Locale; label: string }[] = [
   { code: "fr", label: "FR" },
   { code: "en", label: "EN" },
 ];
@@ -15,7 +17,7 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
-  function switchLocale(newLocale: string) {
+  function switchLocale(newLocale: Locale) {
     startTransition(() => {
       router.replace(pathname, { locale: newLocale });
     });
