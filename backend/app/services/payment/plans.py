@@ -1,15 +1,6 @@
 """
-Definitions des plans tarifaires.
-
-Chaque plan a :
-  - code : identifiant interne
-  - name : nom commercial
-  - price_xof : prix en FCFA
-  - price_eur : prix en EUR (pour Flutterwave)
-  - price_usd : prix en USD (pour Raenest)
-  - credits : nombre de packs inclus
+Definition des plans tarifaires CandidatIA.
 """
-
 from typing import Any, Dict, List, Optional
 
 
@@ -17,86 +8,120 @@ PLANS: Dict[str, Dict[str, Any]] = {
     "essentiel": {
         "code": "essentiel",
         "name": "Essentiel",
-        "description": "5 packs de candidature, sans filigrane",
-        "price_xof": 3300,      # ~5 EUR
-        "price_eur": 4.99,
-        "price_usd": 5.49,
-        "credits": 5,
+        "credits": 50,
+        "price_eur": 7.50,
+        "description": "Ideal pour debuter : 50 credits pour decouvrir CandidatIA.",
         "features": [
-            "5 packs de candidature",
-            "CV methode STAR",
-            "Lettre de motivation",
-            "Guide d entretien",
-            "Sans filigrane",
+            "50 credits IA",
+            "Correction de CV",
+            "Simulation d'entretien",
+            "Support email",
         ],
+        "highlight": False,
     },
     "pro": {
         "code": "pro",
         "name": "Pro",
-        "description": "30 packs par mois + simulateur entretien",
-        "price_xof": 9800,      # ~15 EUR
-        "price_eur": 14.99,
-        "price_usd": 16.49,
-        "credits": 30,
+        "credits": 150,
+        "price_eur": 18.00,
+        "description": "Le plus populaire : 150 credits pour une recherche active.",
         "features": [
-            "30 packs par mois",
-            "Tous les documents",
-            "Simulateur entretien IA",
-            "Suivi des candidatures",
+            "150 credits IA",
+            "Tout Essentiel +",
+            "Lettres de motivation",
+            "Optimisation LinkedIn",
             "Support prioritaire",
         ],
+        "highlight": True,
     },
     "carriere": {
         "code": "carriere",
         "name": "Carriere",
-        "description": "Packs illimites + coaching IA",
-        "price_xof": 26200,     # ~40 EUR
-        "price_eur": 39.99,
-        "price_usd": 43.99,
-        "credits": 999999,      # Illimite
+        "credits": 400,
+        "price_eur": 38.00,
+        "description": "Pour les candidats ambitieux : 400 credits + coaching.",
         "features": [
-            "Packs illimites",
-            "Coaching IA personnalise",
-            "Optimisation LinkedIn",
-            "Preparation salariale",
+            "400 credits IA",
+            "Tout Pro +",
+            "Coaching carriere 1-to-1",
+            "Acces illimite aux modeles",
             "Support VIP",
         ],
+        "highlight": False,
     },
 }
 
 
-def get_plan(code: str) -> Optional[Dict[str, Any]]:
-    """Retourne un plan par son code ou None."""
-    return PLANS.get(code.lower())
+PROVIDER_PRICES: Dict[str, Dict[str, float]] = {
+    "fedapay": {
+        "essentiel": 5000,
+        "pro": 12000,
+        "carriere": 25000,
+    },
+    "flutterwave": {
+        "essentiel": 5000,
+        "pro": 12000,
+        "carriere": 25000,
+    },
+    "raenest": {
+        "essentiel": 8.00,
+        "pro": 19.50,
+        "carriere": 41.00,
+    },
+}
+
+
+PROVIDER_CURRENCY: Dict[str, str] = {
+    "fedapay": "XOF",
+    "flutterwave": "XOF",
+    "raenest": "USD",
+}
 
 
 def list_plans() -> List[Dict[str, Any]]:
-    """Retourne la liste des plans disponibles."""
+    """Retourne la liste de tous les plans."""
     return list(PLANS.values())
 
 
-def get_price_for_provider(plan_code: str, provider: str) -> float:
-    """Retourne le prix adapte au provider (XOF, EUR ou USD)."""
-    plan = get_plan(plan_code)
-    if not plan:
+def get_plan(code: str) -> Optional[Dict[str, Any]]:
+    """Retourne un plan par son code, ou None."""
+    return PLANS.get(code.lower())
+
+
+def get_price_for_provider(plan_code: str, provider_name: str) -> float:
+    """Retourne le prix d un plan pour un provider donne."""
+    plan_code = plan_code.lower()
+    provider_name = provider_name.lower()
+
+    if plan_code not in PLANS:
         raise ValueError(f"Plan inconnu : {plan_code}")
+    if provider_name not in PROVIDER_PRICES:
+        raise ValueError(f"Provider inconnu : {provider_name}")
 
-    if provider == "fedapay":
-        return float(plan["price_xof"])
-    elif provider == "flutterwave":
-        return float(plan["price_eur"])
-    elif provider == "raenest":
-        return float(plan["price_usd"])
-    else:
-        return float(plan["price_xof"])
+    price = PROVIDER_PRICES[provider_name].get(plan_code)
+    if price is None:
+        raise ValueError(
+            f"Prix non defini pour plan={plan_code} provider={provider_name}"
+        )
+    return float(price)
 
 
-def get_currency_for_provider(provider: str) -> str:
-    """Retourne la devise pour un provider."""
-    if provider == "fedapay":
-        return "XOF"
-    elif provider == "flutterwave":
-        return "EUR"
-    elif provider == "raenest":
-        return "USD"
-    return "XOF"
+def get_currency_for_provider(provider_name: str) -> str:
+    """Retourne la devise utilisee par un provider."""
+    provider_name = provider_name.lower()
+    currency = PROVIDER_CURRENCY.get(provider_name)
+    if not currency:
+        raise ValueError(f"Devise inconnue pour provider : {provider_name}")
+    return currency
+
+
+def format_price(amount: float, currency: str) -> str:
+    """Formate un prix pour affichage."""
+    currency = currency.upper()
+    if currency == "XOF":
+        return f"{int(amount):,}".replace(",", " ") + " FCFA"
+    if currency == "USD":
+        return f"${amount:.2f}"
+    if currency == "EUR":
+        return f"{amount:.2f} €"
+    return f"{amount:.2f} {currency}"

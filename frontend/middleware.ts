@@ -1,12 +1,14 @@
-import createMiddleware from "next-intl/middleware";
-import { locales, localePrefix } from "./navigation";
+import createMiddleware from 'next-intl/middleware';
 
 export default createMiddleware({
-  locales,
-  localePrefix,
-  defaultLocale: "fr",
+  locales: ['fr', 'en'],
+  defaultLocale: 'fr',
 });
 
 export const config = {
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  // Ce matcher ignore :
+  // - Les dossiers système (_next, _vercel)
+  // - Les routes API (api)
+  // - TOUS les fichiers avec une extension (ex: favicon.ico, images.png, etc.) grâce à .*\\..*
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 };

@@ -1,5 +1,4 @@
 """Interface abstraite de tout provider de paiement."""
-
 from abc import ABC, abstractmethod
 from typing import Any, Dict
 
@@ -31,6 +30,16 @@ class PaymentProvider(ABC):
         """Verifie la signature d un webhook et retourne le payload normalise."""
         ...
 
+    def get_transaction_status(self, transaction_id: str) -> Dict[str, Any]:
+        """
+        Recupere le statut reel d une transaction aupres du provider.
+        Utilise par l endpoint /verify apres retour utilisateur.
+        Par defaut, leve NotImplementedError (a surcharger).
+        """
+        raise NotImplementedError(
+            f"{self.name} ne supporte pas la verification de statut."
+        )
+
     def safe_checkout(self, intent: PaymentIntent) -> PaymentResult:
         """Point d entree public pour create_checkout avec gestion d erreurs."""
         if not self.is_available():
@@ -38,7 +47,6 @@ class PaymentProvider(ABC):
                 message=f"Provider {self.name} non configure.",
                 details={"provider": self.name},
             )
-
         try:
             return self.create_checkout(intent)
         except PaymentError:

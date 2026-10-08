@@ -1,5 +1,4 @@
 """Schemas Pydantic pour le module paiement."""
-
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, Optional
@@ -33,6 +32,7 @@ class PaymentIntent(BaseModel):
     description: Optional[str] = None
     customer_email: Optional[str] = None
     customer_name: Optional[str] = None
+    locale: str = "fr"
     metadata: Dict[str, Any] = {}
 
 
