@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { CheckCircle2, XCircle, Loader2, Clock, ArrowRight, RefreshCw } from "lucide-react";
 
 import { api } from "@/lib/api";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 
 type VerifyStatus = "loading" | "success" | "failed" | "pending" | "error";
 
