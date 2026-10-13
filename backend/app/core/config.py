@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     app_port: int = 8000
     app_base_url: str = "http://localhost:8000"
     frontend_url: str = "http://localhost:3000"
+    # Stockee en string CSV (ex: "https://a.com,https://b.com")
+    # pour eviter le parsing JSON automatique de Pydantic Settings.
+    allowed_origins: str = ""
 
     # ---------- Securite ----------
     secret_key: str = Field(..., min_length=16)
@@ -104,6 +107,17 @@ class Settings(BaseSettings):
     @property
     def is_development(self) -> bool:
         return self.app_env == "development"
+
+    @property
+    def cors_origins(self) -> List[str]:
+        """Liste des origines CORS autorisees (frontend + extras CSV)."""
+        origins = {self.frontend_url}
+        if self.allowed_origins:
+            for origin in self.allowed_origins.split(","):
+                origin = origin.strip()
+                if origin:
+                    origins.add(origin)
+        return sorted(origins)
 
     # ---------- Validators ----------
     @field_validator("secret_key")
