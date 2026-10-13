@@ -323,7 +323,7 @@ class WordCVGenerator(DocumentGenerator):
                     r_desc.font.size = Pt(9)
 
                 if technos:
-                    r_tech = p.add_run(f" [{", ".join(technos)}]")
+                    r_tech = p.add_run(f" [{', '.join(technos)}]")
                     r_tech.italic = True
                     r_tech.font.size = Pt(8)
 
