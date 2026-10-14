@@ -1,12 +1,8 @@
-import { unstable_setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Inter } from "next/font/google";
-import "../globals.css";
+import { notFound } from "next/navigation";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-
-const locales = ["fr", "en"] as const;
+const locales = ["fr", "en"];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -19,15 +15,15 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  // Active le rendu statique pour cette locale (requis par next-intl)
-  unstable_setRequestLocale(locale);
+  if (!locales.includes(locale as any)) {
+    notFound();
+  }
 
-  // Charge les messages
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={inter.variable}>
-      <body className={inter.className}>
+    <html lang={locale}>
+      <body>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

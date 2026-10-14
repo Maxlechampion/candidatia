@@ -1,5 +1,8 @@
 ﻿import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "CandidatIA - Generez votre pack de candidature en 1 clic",
@@ -12,6 +15,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Note : <html> et <body> sont fournis par app/[locale]/layout.tsx
+  // Le <html> et <body> sont fournis par app/[locale]/layout.tsx
+  // Ce layout ne sert qu'a importer globals.css et definir les metadata.
   return children;
 }
