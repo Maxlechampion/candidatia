@@ -2,6 +2,10 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+// Force le rendu dynamique pour tous les layouts enfants
+// (necessaire car certaines pages utilisent headers/searchParams)
+export const dynamic = "force-dynamic";
+
 const locales = ["fr", "en"];
 
 export function generateStaticParams() {

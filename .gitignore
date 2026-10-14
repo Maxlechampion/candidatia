@@ -57,3 +57,5 @@ secrets/
 *.log
 npm-debug.log*
 yarn-error.log*
+# Backups automatiques des scripts
+.backups/

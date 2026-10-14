@@ -14,17 +14,6 @@ Strategie :
 from typing import Any, Dict, List
 
 from app.core.logging import get_logger
-from app.services.ai.schemas import (
-    GuideChecklist,
-    GuideCloture,
-    GuideData,
-    GuideFaiblesse,
-    GuidePhase,
-    GuidePiege,
-    GuideQuestion,
-    GuideQuestionsParInterlocuteur,
-    GuideSynthese,
-)
 
 logger = get_logger("ai.guide_validator")
 
@@ -65,6 +54,7 @@ def _fallback_synthese(nom_candidat: str, poste: str) -> Dict[str, Any]:
 
 
 def _fallback_checklist() -> Dict[str, Any]:
+    """Checklist de secours."""
     return {
         "logistique": [
             "Verifier l adresse et le moyen de transport (arriver 15 min en avance)",
@@ -151,6 +141,7 @@ def _fallback_phases(nom_candidat: str, poste: str, entreprise: str) -> List[Dic
 
 
 def _fallback_pieges() -> List[Dict[str, Any]]:
+    """Questions pieges de secours."""
     return [
         {
             "question": "Quelle est votre plus grande faiblesse ?",
@@ -183,6 +174,7 @@ def _fallback_pieges() -> List[Dict[str, Any]]:
 
 
 def _fallback_questions_interlocuteur() -> Dict[str, List[str]]:
+    """Questions a poser par interlocuteur - fallback."""
     return {
         "rh": [
             "Comment decrivez-vous la culture d entreprise ?",
@@ -202,6 +194,7 @@ def _fallback_questions_interlocuteur() -> Dict[str, List[str]]:
 
 
 def _fallback_cloture() -> Dict[str, Any]:
+    """Section cloture - fallback."""
     return {
         "strategie_salariale": (
             "Ne donnez JAMAIS un chiffre unique. Donnez une fourchette basee sur le "
@@ -229,7 +222,7 @@ def _fallback_cloture() -> Dict[str, Any]:
 # ============================================================
 
 def validate_and_enrich_guide(
-    guide_data: Dict[str, Any],
+    guide_data: Any,
     nom_candidat: str = "Candidat",
 ) -> Dict[str, Any]:
     """
@@ -239,6 +232,7 @@ def validate_and_enrich_guide(
     - Comble les sections manquantes ou vides par des templates
     - Retourne le guide valide et enrichi
     """
+    # Securite : si l input n'est pas un dict, on le remplace par un dict vide
     if not isinstance(guide_data, dict):
         logger.error("guide_data_not_dict", type=type(guide_data).__name__)
         guide_data = {}
@@ -246,7 +240,7 @@ def validate_and_enrich_guide(
     poste = guide_data.get("titre_poste", "Poste")
     entreprise = guide_data.get("nom_entreprise", "Entreprise")
 
-    enriched = dict(guide_data)  # copie superficielle
+    enriched = dict(guide_data)
 
     # --- Synthese strategique ---
     synthese = enriched.get("synthese_strategique") or {}
@@ -254,11 +248,14 @@ def validate_and_enrich_guide(
         logger.warning("guide_missing_synthese")
         synthese = _fallback_synthese(nom_candidat, poste)
     else:
-        # Combler les sous-elements manquants
         if not synthese.get("trois_forces_a_valoriser"):
-            synthese["trois_forces_a_valoriser"] = _fallback_synthese(nom_candidat, poste)["trois_forces_a_valoriser"]
+            synthese["trois_forces_a_valoriser"] = _fallback_synthese(
+                nom_candidat, poste
+            )["trois_forces_a_valoriser"]
         if not synthese.get("trois_faiblesses_a_gerer"):
-            synthese["trois_faiblesses_a_gerer"] = _fallback_synthese(nom_candidat, poste)["trois_faiblesses_a_gerer"]
+            synthese["trois_faiblesses_a_gerer"] = _fallback_synthese(
+                nom_candidat, poste
+            )["trois_faiblesses_a_gerer"]
     enriched["synthese_strategique"] = synthese
 
     # --- Checklist ---
@@ -272,28 +269,30 @@ def validate_and_enrich_guide(
     if not enriched.get("defis_cles_entreprise"):
         logger.warning("guide_missing_defis")
         enriched["defis_cles_entreprise"] = [
-            "Defi 1 : A preciser apres analyse de l offre",
-            "Defi 2 : A preciser",
+            "Enjeu cache 1 : a preciser apres analyse de l offre",
+            "Enjeu cache 2 : a preciser",
         ]
 
-    # --- Phases ---
+    # --- Phases (CRITIQUE : bug corrige ici) ---
     phases = enriched.get("phases_entretien") or []
-    if not phases or len(phases) < 2:
+    if not isinstance(phases, list):
+        phases = []
+    if len(phases) < 2:
         logger.warning("guide_missing_phases", count=len(phases))
-        enriched["phases_entretien"] = _fallback_phases(nom_candidat, poste, entreprise)
-    else:
-        # Verifier que chaque phase a bien des questions
-        for phase in phases:
-            if not isinstance(phase, dict):
-                continue
+        phases = _fallback_phases(nom_candidat, poste, entreprise)
+    # Assurer que chaque phase est bien un dict avec des questions
+    for phase in phases:
+        if isinstance(phase, dict):
             if not phase.get("questions_probables"):
                 phase["questions_probables"] = []
-    enriched["phases_entretien"] = phases
+    enriched["phases_entretien"] = phases  # ← Assignation correcte
 
     # --- Pieges ---
-    if not enriched.get("questions_piege_et_pression"):
+    pieges = enriched.get("questions_piege_et_pression") or []
+    if not pieges or len(pieges) < 1:
         logger.warning("guide_missing_pieges")
-        enriched["questions_piege_et_pression"] = _fallback_pieges()
+        pieges = _fallback_pieges()
+    enriched["questions_piege_et_pression"] = pieges
 
     # --- Questions a poser ---
     questions_par_int = enriched.get("questions_a_poser_par_interlocuteur") or {}
@@ -311,14 +310,16 @@ def validate_and_enrich_guide(
 
     # --- Validation finale via Pydantic (log seulement) ---
     try:
+        from app.services.ai.schemas import GuideData
         validated = GuideData(**enriched)
+        result = validated.model_dump()
         logger.info(
             "guide_validated",
-            nb_phases=len(validated.phases_entretien),
-            nb_pieges=len(validated.questions_piege_et_pression),
-            has_synthese=bool(validated.synthese_strategique.pitch_30s),
+            nb_phases=len(result.get("phases_entretien", [])),
+            nb_pieges=len(result.get("questions_piege_et_pression", [])),
+            has_synthese=bool(result.get("synthese_strategique", {}).get("pitch_30s")),
         )
-        return validated.model_dump()
+        return result
     except Exception as e:
         logger.warning("guide_pydantic_validation_failed", error=str(e))
         # On retourne le guide enrichi brut meme si Pydantic rale
