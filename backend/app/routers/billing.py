@@ -1,29 +1,30 @@
 """Router billing : plans, providers, checkout, historique, verification."""
+
 from typing import Any, Dict, List, Optional
-from app.services.auth.dependencies import get_current_user
 
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
 from app.core.errors import NotFoundError, PaymentError, ValidationError
 from app.core.logging import get_logger
-from app.services.auth.dependencies import get_current_user
+from app.core.security import get_current_user  # ← CORRIGÉ
 from app.services.payment.orchestrator import get_payment_orchestrator
 from app.services.payment.plans import list_plans
 
 logger = get_logger("routers.billing")
 
-router = APIRouter(prefix="/billing", tags=["billing"])
+router = APIRouter(prefix="/api/billing", tags=["billing"])  # ← CORRIGÉ
 
 
 # ============================================================
-# Schemas de reponse
+# Schemas
 # ============================================================
+
 class CheckoutRequest(BaseModel):
     plan_code: str
     provider: str
     customer_name: Optional[str] = None
-    locale: str = "fr"  # <-- AJOUTER CETTE LIGNE
+    locale: str = "fr"
 
 
 class CheckoutResponse(BaseModel):
@@ -39,15 +40,16 @@ class CheckoutResponse(BaseModel):
 
 
 class VerifyResponse(BaseModel):
-    status: str  # "verified" | "already_processed" | "pending"
+    status: str
     payment_id: str
-    new_status: str  # "success" | "failed" | "pending" | "cancelled" | "refunded"
+    new_status: str
     real_status: Optional[str] = None
 
 
 # ============================================================
-# GET /billing/plans
+# GET /api/billing/plans
 # ============================================================
+
 @router.get("/plans")
 async def get_plans() -> Dict[str, Any]:
     """Liste tous les plans tarifaires disponibles."""
@@ -56,8 +58,9 @@ async def get_plans() -> Dict[str, Any]:
 
 
 # ============================================================
-# GET /billing/providers
+# GET /api/billing/providers
 # ============================================================
+
 @router.get("/providers")
 async def get_providers() -> Dict[str, Any]:
     """Liste les providers de paiement disponibles."""
@@ -67,17 +70,15 @@ async def get_providers() -> Dict[str, Any]:
 
 
 # ============================================================
-# POST /billing/checkout
+# POST /api/billing/checkout
 # ============================================================
+
 @router.post("/checkout", response_model=CheckoutResponse)
 async def create_checkout(
     body: CheckoutRequest,
     user: Dict[str, Any] = Depends(get_current_user),
 ) -> CheckoutResponse:
-    """
-    Cree une session de paiement.
-    Retourne l URL de checkout vers laquelle rediriger l utilisateur.
-    """
+    """Cree une session de paiement."""
     orchestrator = get_payment_orchestrator()
 
     try:
@@ -87,9 +88,9 @@ async def create_checkout(
             plan_code=body.plan_code,
             provider_name=body.provider,
             customer_name=body.customer_name or user.get("full_name"),
-            locale=body.locale,  # <-- AJOUTER CETTE LIGNE
+            locale=body.locale,
         )
-    except (PaymentError, NotFoundError, ValidationError) as e:
+    except (PaymentError, NotFoundError, ValidationError):
         raise
 
     logger.info(
@@ -104,31 +105,32 @@ async def create_checkout(
 
 
 # ============================================================
-# GET /billing/payments
+# GET /api/billing/payments
 # ============================================================
+
 @router.get("/payments")
 async def list_payments(
     limit: int = Query(20, ge=1, le=100),
     user: Dict[str, Any] = Depends(get_current_user),
 ) -> Dict[str, Any]:
-    """Historique des paiements de l utilisateur connecte."""
+    """Historique des paiements de l'utilisateur connecte."""
     orchestrator = get_payment_orchestrator()
     payments = orchestrator.list_user_payments(user_id=user["id"], limit=limit)
     return {"payments": payments, "count": len(payments)}
 
 
 # ============================================================
-# GET /billing/verify  ← NOUVEAU ENDPOINT
+# GET /api/billing/verify
 # ============================================================
+
 @router.get("/verify", response_model=VerifyResponse)
 async def verify_payment(
     reference: str = Query(..., description="Reference/ID de transaction FedaPay"),
     user: Dict[str, Any] = Depends(get_current_user),
 ) -> VerifyResponse:
     """
-    Verifie le statut reel d un paiement aupres du provider (FedaPay).
+    Verifie le statut reel d'un paiement aupres du provider (FedaPay).
     Appele par la page /billing/return apres le retour utilisateur.
-    Si le paiement est approuve, credite automatiquement l utilisateur.
     """
     if not reference or not reference.strip():
         raise ValidationError(message="Reference de transaction manquante.")

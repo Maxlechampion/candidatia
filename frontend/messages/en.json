@@ -106,6 +106,7 @@
     "text_label": "Plain text",
     "profile_placeholder": "Paste your resume or profile here...",
     "offer_placeholder": "Paste the job offer here...",
+    "or_text": "OR",
     "submit": "Generate my pack",
     "submitting": "Generating...",
     "generating_info": "AI generation in progress... This may take 30 to 60 seconds.",

@@ -12,7 +12,18 @@ interface Generation {
   score_matching: number | null;
   status: string;
   created_at: string;
+  zip_path: string | null;
+  has_documents: boolean;
 }
+
+const LANG_LABELS: Record<string, string> = {
+  fr: "Francais",
+  en: "English",
+  es: "Espanol",
+  de: "Deutsch",
+  pt: "Portugues",
+  ar: "Arabic",
+};
 
 export default function HistoryPage() {
   const t = useTranslations("history");
@@ -45,7 +56,9 @@ export default function HistoryPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{generations.length} {t("title").toLowerCase()}</CardTitle>
+          <CardTitle>
+            {generations.length} {generations.length === 1 ? "pack" : "packs"}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -60,23 +73,50 @@ export default function HistoryPage() {
               {generations.map((gen) => (
                 <div
                   key={gen.id}
-                  className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200"
+                  className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-primary-300 transition"
                 >
-                  <div>
-                    <p className="font-medium text-slate-700">
-                      {t("pack_label")} {gen.output_language.toUpperCase()}
-                    </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="font-medium text-slate-700">
+                        Pack en{" "}
+                        {LANG_LABELS[gen.output_language] ||
+                          gen.output_language.toUpperCase()}
+                      </p>
+                      <span
+                        className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+                          gen.status === "completed"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {gen.status}
+                      </span>
+                    </div>
                     <p className="text-xs text-slate-500">
-                      {new Date(gen.created_at).toLocaleString()}
+                      {new Date(gen.created_at).toLocaleString("fr-FR", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                   </div>
-                  <div className="text-right">
+
+                  <div className="text-right shrink-0">
                     {gen.score_matching && (
-                      <p className="text-sm font-bold text-primary-600">
-                        {t("score_label")} : {gen.score_matching}/100
-                      </p>
+                      <div className="mb-1">
+                        <span className="text-sm font-bold text-primary-600">
+                          {gen.score_matching}
+                        </span>
+                        <span className="text-xs text-slate-400">/100</span>
+                      </div>
                     )}
-                    <p className="text-xs text-slate-500">{gen.status}</p>
+                    {gen.has_documents && (
+                      <span className="text-xs text-slate-500">
+                        CV - Lettre - Guide
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}

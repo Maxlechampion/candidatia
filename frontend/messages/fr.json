@@ -106,6 +106,7 @@
     "text_label": "Texte brut",
     "profile_placeholder": "Collez ici votre CV ou profil...",
     "offer_placeholder": "Collez ici l'offre d'emploi...",
+    "or_text": "OU",
     "submit": "Generer mon pack",
     "submitting": "Generation en cours...",
     "generating_info": "Generation IA en cours... Cela peut prendre 30 a 60 secondes.",

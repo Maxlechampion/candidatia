@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 
 import { api } from "@/lib/api";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
 
 // ============================================================
@@ -111,12 +111,12 @@ export default function BillingPage() {
         setError(null);
 
         // 1. Plans
-        const { data: plansData } = await api.get<{ plans: Plan[] }>("/billing/plans");
+        const { data: plansData } = await api.get<{ plans: Plan[] }>("/api/billing/plans");
         setPlans(plansData.plans);
 
         // 2. Historique paiements
         const { data: paymentsData } = await api.get<{ payments: Payment[] }>(
-          "/billing/payments"
+          "/api/billing/payments"
         );
         setPayments(paymentsData.payments);
 
@@ -157,7 +157,7 @@ export default function BillingPage() {
       setCheckingOut(true);
       setError(null);
 
-      const { data } = await api.post<CheckoutResponse>("/billing/checkout", {
+      const { data } = await api.post<CheckoutResponse>("/api/billing/checkout", {
         plan_code: selectedPlan.code,
         provider: "fedapay", // ← FedaPay par défaut (propose Mobile Money + Carte)
         locale: params.locale,

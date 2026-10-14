@@ -1,5 +1,6 @@
 """Router /api/generate — pipeline complet de generation de pack (protege par JWT)."""
 
+import hashlib
 import os
 from typing import Any, Dict, Optional
 
@@ -25,6 +26,59 @@ from app.services.language.locale_map import get_locale_conventions
 
 logger = get_logger("router.generation")
 router = APIRouter(prefix="/api", tags=["generation"])
+
+
+def _hash_content(content: str) -> str:
+    """Genere un hash court pour dedupliquer les entrees."""
+    return hashlib.sha256(content.encode("utf-8")).hexdigest()[:16]
+
+
+def _save_generation(
+    user_id: str,
+    cv_data: Dict[str, Any],
+    guide_data: Dict[str, Any],
+    pack_result: Dict[str, Any],
+    output_language: str,
+    profil: str,
+    offre: str,
+) -> Optional[str]:
+    """
+    Sauvegarde une generation en DB.
+
+    Retourne l ID de la generation creee, ou None si echec.
+    """
+    try:
+        from app.core.database import insert_row
+
+        analyse = cv_data.get("analyse", {})
+        score_matching = analyse.get("score_matching")
+
+        generation_data = {
+            "user_id": user_id,
+            "input_profile_hash": _hash_content(profil),
+            "input_offer_hash": _hash_content(offre),
+            "output_language": output_language,
+            "score_matching": int(score_matching) if score_matching else None,
+            "cv_path": pack_result.get("cv_path"),
+            "lettre_path": pack_result.get("lettre_path"),
+            "guide_path": pack_result.get("guide_path"),
+            "zip_path": pack_result.get("zip_path"),
+            "credits_consumed": 1,
+            "status": "completed",
+        }
+
+        row = insert_row("generations", generation_data)
+        logger.info(
+            "generation_saved",
+            user_id=user_id,
+            generation_id=row.get("id"),
+            score=score_matching,
+        )
+        return row.get("id")
+
+    except Exception as e:
+        logger.exception("generation_save_failed", user_id=user_id, error=str(e))
+        return None
 
 
 async def _extraire_entree(
@@ -139,14 +193,16 @@ async def generate_pack(
         logger.exception("lettre_generation_failed", error=str(e))
         raise HTTPException(status_code=502, detail=f"Erreur generation Lettre : {str(e)}")
 
-    # 5. Guide
+        # 5. Guide
     try:
         sys_prompt, user_prompt = get_guide_prompt(cv_contexte, offre, locale, output_language)
-        guide_data = orchestrator.generate_json(sys_prompt, user_prompt)
+        guide_data_raw = orchestrator.generate_json(sys_prompt, user_prompt)
+        # Validation + enrichissement (comble les sections manquantes)
+        from app.services.ai.guide_validator import validate_and_enrich_guide
+        guide_data = validate_and_enrich_guide(guide_data_raw, nom_candidat)
     except Exception as e:
         logger.exception("guide_generation_failed", error=str(e))
         raise HTTPException(status_code=502, detail=f"Erreur generation Guide : {str(e)}")
-
     # 6. Relance (optionnel)
     relance_data = None
     if inclure_relance:
@@ -196,6 +252,37 @@ async def generate_pack(
     zip_path = result["zip_path"]
     if not os.path.exists(zip_path):
         raise HTTPException(status_code=500, detail="Le ZIP n a pas ete cree.")
+
+    # Sauvegarde en DB pour l historique
+
+
+    _save_generation(
+
+
+        user_id=user_id,
+
+
+        cv_data=cv_data,
+
+
+        guide_data=guide_data,
+
+
+        pack_result=result,
+
+
+        output_language=output_language,
+
+
+        profil=profil,
+
+
+        offre=offre,
+
+
+    )
+
+
 
     logger.info("generate_success", user_id=user_id, zip_path=zip_path)
 

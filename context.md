@@ -1,70 +1,20 @@
-# 📌 Traduction en français + Mise à jour de `context.md`
+Voici le fichier `context.md` mis à jour en **version 0.9.0**, intégrant :
+
+- La nouvelle grille tarifaire validée (5 plans B2C + B2B reporté)
+- L'historique des packs générés **maintenant fonctionnel**
+- Le **guide d'entretien enrichi** (8 phases, validator, prompt v2)
+- Les corrections de bugs (billing, historique, i18n)
+- L'état du frontend et du backend à jour
 
 ---
-
-## 一、Traduction en français
-
-**结论：是的，你有法律义务遵守贝宁的数据保护规则，因为你的平台面向贝宁用户提供服务。“国际平台”的身份并不能免除这一义务，关键在于你是否“有意向贝宁境内的人提供商品或服务”。**
-
-### 贝宁法律的域外效力
-
-贝宁《数字法典》第381条明确规定了域外适用情形。如果你的平台符合以下任一条件，就必须遵守贝宁的个人数据保护规则：
-
-1. **在贝宁境内处理数据**：无论处理行为是否实际发生在贝宁，只要你的处理活动是在贝宁境内的“负责人”或“处理者”框架下进行。
-2. **针对贝宁境内用户提供服务**：你（无论是否在贝宁设立）处理了位于贝宁境内的**数据主体**的数据，且处理活动与“**向贝宁境内的人提供商品或服务**”相关，无论是否要求付款。这与你“国际平台”的定位直接相关。
-3. **监控贝宁境内用户的行为**：如果你的平台追踪或分析用户在贝宁境内的行为。
-
-### 核心判定标准：“有意 targeting”
-
-法律适用的关键不在于“平台是否可被贝宁访问”，而在于你是否有**意图**向贝宁用户提供服务。贝宁法律参考了类似GDPR的“targeting”标准。
-
-**以下迹象可能表明你有意向贝宁用户提供服务**：
-- 你的平台支持**贝宁使用的货币**（如XOF）或当地支付方式（如MTN MoMo）。
-- 你的平台使用**法语**（贝宁官方语言）作为主要界面语言，或明确提及服务贝宁用户。
-- 你在营销中提及贝宁市场。
-
-**单纯“可被访问”通常不够**：如果只有居住在欧洲的贝宁人碰巧使用了你的平台，且你的平台明显只面向欧洲市场，则不一定触发贝宁法律的适用。但鉴于你已计划集成FedaPay等贝宁支付方式，**“有意 targeting”的证据是比较充分的**。
-
-### 你必须履行的核心义务
-
-如果你被认定为需要遵守贝宁法律，以下义务是强制性的：
-
-1. **遵守数据处理基本原则**：包括**合法性、目的限制、数据最小化、准确性、存储限制、完整性与保密性**。
-2. **向APDP进行申报或申请授权**：根据处理活动的性质，你可能需要向贝宁个人数据保护局（APDP）提交**申报**或申请**授权**。建立用户数据库通常需要申报。
-3. **保障用户权利**：必须为用户提供行使**访问权、更正权、反对权、删除权和可携带权**的渠道。其中，对**商业营销目的的反对权**必须得到响应，时限为**30天**。
-4. **履行其他义务**：包括**保密义务、安全义务、数据保留义务**等。对于数据跨境传输（你的数据可能存储在Supabase海外服务器），需要确保具备充分保障。
-
-### 违规风险
-
-贝宁法律对违规行为有严厉的处罚规定。历史上，法律对**欺诈性、不忠诚或非法收集**个人数据等严重违规行为，规定了**5年至10年监禁**以及**1000万至5000万西非法郎**的罚款。
-
-### 简化的合规路径
-
-对于初创平台，贝宁官方指南建议采取以下步骤：
-- **指定一名数据保护官（DPO）** 或责任人。
-- **建立处理活动登记册**，记录每项处理的目的、数据类别、保留期限、分包商和安全措施。
-- **制定合规的文件**，包括隐私政策、数据处理协议（与Supabase、Brevo等分包商签署）。
-- **向APDP履行申报手续**，并按要求提交年度报告。
-
-### 是否需要考虑其他司法辖区？
-
-你的问题聚焦贝宁，但**全球性平台可能触发多地法律**。例如，如果你的平台**有意向欧盟用户提供服务**（如支持欧元、提供欧洲语言版本），则可能同时需要遵守**GDPR**。核心逻辑与贝宁类似：**“有意 targeting”** 是启动法律适用的关键。
-
-**建议**：鉴于你已经明确计划支持贝宁货币和支付方式，**主动向APDP进行咨询并完成申报**是降低风险最稳妥的做法。
-
----
-
-## 二、`context.md` 更新版本（v0.8.0）
-
-**Ouvre `docs/context.md`** et **remplace tout le contenu** par :
 
 ```markdown
 # context.md — Contexte global du projet CandidatIA
 
-> **Version** : 0.8.0
-> **Dernière mise à jour** : 2026-10-01
-> **Statut** : Frontend complet — En attente de déploiement et de conformité APDP
-> **Tags Git** : `phase-6-complete`
+> **Version** : 0.9.0
+> **Dernière mise à jour** : 2026-10-14
+> **Statut** : Historique + Guide enrichi opérationnels — Nouvelle grille tarifaire en cours d'application
+> **Tags Git** : `phase-7e-complete`, `fix-history`, `pricing-v2-pending`
 
 ---
 
@@ -73,19 +23,19 @@
 ### 1.1 Pitch
 CandidatIA est un SaaS mondial, multilingue, qui génère en quelques secondes
 un **pack de candidature complet** (CV optimisé méthode STAR, lettre de motivation
-culturellement adaptée, guide d'entretien personnalisé, suivi de relance programmable)
-dans la langue choisie par l'utilisateur, avec un score de matching ATS.
+culturellement adaptée, guide d'entretien professionnel en 8 phases, suivi de relance
+programmable) dans la langue choisie par l'utilisateur, avec un score de matching ATS.
 
 ### 1.2 Proposition de valeur
 - **Pour le candidat** : gain de temps massif, qualité "chasseur de têtes",
-  adaptation culturelle automatique au marché cible.
+  adaptation culturelle automatique au marché cible, guide d'entretien de niveau coaching premium.
 - **Pour la plateforme** : modèle freemium scalable, encaissement au Bénin,
   coût opérationnel proche de zéro au lancement.
 
 ### 1.3 Cibles
 - **B2C primaire** : chercheurs d'emploi francophones (France, Afrique de l'Ouest, diaspora)
 - **B2C secondaire** : marché anglophone mondial, MENA, APAC
-- **B2B** : écoles de commerce, cabinets de recrutement, ONG, institutions
+- **B2B** : écoles de commerce, cabinets de recrutement, ONG, institutions (Phase 10)
 
 ---
 
@@ -102,16 +52,16 @@ dans la langue choisie par l'utilisateur, avec un score de matching ATS.
 | **4** | Auth + DB + quotas + protection JWT | 41 | ✅ Terminée |
 | **5** | Paiement multi-canal (FedaPay + Flutterwave + Raenest) | 32 | ✅ Terminée |
 | **6** | Système de relance + scheduler + emails Brevo | 24 | ✅ Terminée |
-| **7a** | Structure Next.js 14 + Tailwind + i18n | — | ✅ Terminée |
-| **7b** | Pages Auth (Login + Register) + composants UI | — | ✅ Terminée |
-| **7c** | Dashboard + Générateur + Historique | — | ✅ Terminée |
-| **7d** | Relances + Paiement + fix multilingue | — | ✅ Terminée |
-| **7e** | Landing complète + Pages légales + Cookie banner | — | ✅ Terminée |
+| **7a-7f** | Frontend Next.js complet + i18n | — | ✅ Terminée |
 | **7e-legal** | Pages légales conformes au Code du numérique du Bénin | — | ✅ Terminée |
+| **FIX-historique** | Sauvegarde en DB + endpoint + affichage enrichi | — | ✅ Terminée (2026-10-14) |
+| **FIX-billing** | Chemins API `/api/billing/*` corrigés | — | ✅ Terminée (2026-10-14) |
+| **GUIDE-v2** | Guide d'entretien 8 phases + validator + prompt enrichi | — | ✅ Terminée (2026-10-14) |
+| **PRICING-v2** | Nouvelle grille tarifaire 5 plans B2C | — | ⏳ À appliquer |
 | **8** | Déploiement production (Vercel + Render) | — | ⏳ À venir |
 | **9** | Conformité APDP (déclaration + registre) | — | ⏳ À venir |
-| **10** | Marketing + itération | — | ⏳ À venir |
-| **TOTAL** | | **176** | |
+| **10** | Marketing + B2B + itération | — | ⏳ À venir |
+| **TOTAL** | | **176+** | |
 
 ### 2.2 Capacités opérationnelles
 
@@ -119,17 +69,20 @@ dans la langue choisie par l'utilisateur, avec un score de matching ATS.
 |---|---|
 | Ingestion PDF (texte + OCR), DOCX, ODT, RTF, HTML, MD, images | ✅ |
 | Détection langue (15 langues) + mapping culturel | ✅ |
+| Mapping conventions d'entretien par culture (nouveau) | ✅ |
 | Moteur IA fallback (Groq → Gemini → Mistral → Cohere) | ✅ |
-| Circuit breaker + cache Redis | ✅ |
+| Circuit breaker + cache Redis (recommandation : debug Redis) | ⚠️ |
 | Génération CV méthode STAR (multilingue) | ✅ |
 | Génération Lettre AIDA (multilingue) | ✅ |
-| Génération Guide d'entretien (multilingue) | ✅ |
+| **Génération Guide d'entretien 8 phases (nouveau)** | ✅ |
+| **Validator + enrichissement automatique du guide (nouveau)** | ✅ |
 | Génération Brouillon relance (multilingue) | ✅ |
 | Assemblage ZIP | ✅ |
 | Auth JWT (register, login, /me) | ✅ |
 | Gestion crédits + quotas par plan | ✅ |
 | Protection de `/api/generate` | ✅ |
-| Historique + statistiques par utilisateur | ✅ |
+| **Historique des packs (sauvegarde + affichage) (nouveau)** | ✅ |
+| Statistiques utilisateur (total, score moyen) | ✅ |
 | Paiement Mobile Money (FedaPay sandbox) | ✅ |
 | Paiement carte (Flutterwave) | ✅ |
 | Paiement crypto (Raenest) | ✅ |
@@ -166,10 +119,10 @@ dans la langue choisie par l'utilisateur, avec un score de matching ATS.
 - Déploiement : Render.com
 
 **IA (fallback en cascade)**
-- Groq (Llama 3.3 70B) — primary
+- Groq (Llama 3.3 70B ou gpt-oss-120b) — primary
 - Google Gemini (1.5 Flash)
 - Mistral (Small)
-- Cohere (Command R)
+- Cohere (Command R) — actuellement clé invalide, à régénérer
 
 **Ingestion**
 - pypdf + pdfplumber (PDF textuels)
@@ -179,7 +132,7 @@ dans la langue choisie par l'utilisateur, avec un score de matching ATS.
 
 **Données**
 - Supabase Postgres (DB)
-- Upstash Redis (cache)
+- Upstash Redis (cache — actuellement indisponible)
 - Brevo (emails)
 
 **Paiement (encaissement au Bénin)**
@@ -191,22 +144,62 @@ dans la langue choisie par l'utilisateur, avec un score de matching ATS.
 
 ```
 candidatia/
-├── backend/              # FastAPI (176 tests)
+├── backend/              # FastAPI (176+ tests)
 │   ├── app/
-│   │   ├── core/         # config, security, logging, telemetry, database
-│   │   ├── models/       # schémas Pydantic
+│   │   ├── core/         # config, security, logging, telemetry, database, supabase_client
+│   │   ├── models/       # schémas Pydantic (user, generation, payment, relance, ai_log)
 │   │   ├── routers/      # endpoints FastAPI
+│   │   │   ├── auth.py
+│   │   │   ├── billing.py
+│   │   │   ├── generation.py         # → inclut _save_generation() (fix-historique)
+│   │   │   ├── generations.py        # → historique enrichi
+│   │   │   ├── health.py
+│   │   │   ├── ingestion.py
+│   │   │   ├── quota.py
+│   │   │   ├── relance.py
+│   │   │   ├── scheduler.py
+│   │   │   └── webhooks.py
 │   │   └── services/
 │   │       ├── ai/       # orchestrateur multi-provider + prompts
+│   │       │   ├── prompts/
+│   │       │   │   ├── cv_prompt.py
+│   │       │   │   ├── guide_prompt.py      # → enrichi 8 phases (GUIDE-v2)
+│   │       │   │   ├── lettre_prompt.py
+│   │       │   │   └── relance_prompt.py
+│   │       │   ├── schemas.py               # → inclut GuideData, GuidePhase, etc.
+│   │       │   ├── guide_validator.py       # → nouveau (validation + fallbacks)
+│   │       │   ├── orchestrator.py
+│   │       │   ├── cache.py
+│   │       │   ├── json_repair.py
+│   │       │   ├── base.py
+│   │       │   ├── groq.py
+│   │       │   ├── gemini.py
+│   │       │   ├── mistral.py
+│   │       │   └── cohere.py
 │   │       ├── auth/     # bcrypt, JWT, users, quotas
 │   │       ├── email/    # Brevo + templates
-│   │       ├── generation/ # Word CV/Lettre/Guide/Relance + PackBuilder
+│   │       ├── generation/  # Word CV/Lettre/Guide/Relance + PackBuilder
+│   │       │   ├── word_cv.py
+│   │       │   ├── word_lettre.py
+│   │       │   ├── word_guide.py            # → générateur dense 8 phases (GUIDE-v2)
+│   │       │   ├── word_relance.py
+│   │       │   ├── pack_builder.py
+│   │       │   ├── pdf_export.py
+│   │       │   ├── style.py
+│   │       │   └── base.py
 │   │       ├── ingestion/ # extracteurs multi-format
-│   │       ├── language/ # détection + locale_map
-│   │       ├── payment/  # FedaPay + Flutterwave + Raenest + orchestrateur
+│   │       ├── language/ # détection + locale_map (enrichi conventions entretien)
+│   │       ├── payment/  # FedaPay + Flutterwave + Raenest + orchestrateur + plans
+│   │       │   ├── plans.py                 # → à réécrire pour PRICING-v2
+│   │       │   ├── orchestrator.py
+│   │       │   ├── fedapay.py
+│   │       │   ├── flutterwave.py
+│   │       │   ├── raenest.py
+│   │       │   ├── base.py
+│   │       │   └── schemas.py
 │   │       └── relance/  # service + scheduler
 │   ├── scripts/          # schema.sql, init_db.py, test_*.py
-│   └── tests/            # 176 tests
+│   └── tests/            # 176+ tests
 ├── frontend/             # Next.js 14
 │   ├── app/[locale]/
 │   │   ├── page.tsx               # Landing enrichie
@@ -214,9 +207,10 @@ candidatia/
 │   │   ├── dashboard/             # Espace utilisateur
 │   │   │   ├── page.tsx           # Accueil (stats)
 │   │   │   ├── generate/          # Générateur
-│   │   │   ├── history/           # Historique
+│   │   │   ├── history/           # Historique enrichi (fix-historique)
 │   │   │   ├── relances/          # Relances
-│   │   │   └── billing/           # Paiement
+│   │   │   └── billing/           # Paiement (5 plans à venir : PRICING-v2)
+│   │   ├── billing/return/        # Retour de paiement
 │   │   └── legal/
 │   │       ├── terms/             # CGU
 │   │       ├── privacy/           # Confidentialité
@@ -243,7 +237,7 @@ candidatia/
 **Auth** : `/api/auth/register`, `/api/auth/login`, `/api/auth/me`, `/api/auth/me/quota`
 **Historique** : `/api/generations`, `/api/generations/stats`
 **Quota** : `/api/quota/plans`, `/api/quota/me`
-**Paiement** : `/api/billing/plans`, `/api/billing/providers`, `/api/billing/checkout`, `/api/billing/payments`
+**Paiement** : `/api/billing/plans`, `/api/billing/providers`, `/api/billing/checkout`, `/api/billing/payments`, `/api/billing/verify`
 **Webhooks** : `/webhooks/fedapay`, `/webhooks/flutterwave`, `/webhooks/raenest`
 **Relance** : `/api/relance/schedule`, `/api/relance/pending`, `/api/relance`, `/api/relance/{id}/cancel`, `/api/relance/{id}/mark-sent`
 **Scheduler** : `/api/scheduler/run`, `/api/scheduler/health`
@@ -252,41 +246,101 @@ candidatia/
 
 ## 4. BASE DE DONNÉES (Supabase)
 
-| Table | Rôle |
-|---|---|
-| `profiles` | Utilisateurs (id, email, password_hash, credits, plan, locale) |
-| `generations` | Historique des packs (user_id, score, paths, langues) |
-| `payments` | Paiements (provider, transaction_id, amount, status, credits) |
-| `relances` | Relances programmables (user_id, scheduled_date, email_draft, status) |
-| `ai_logs` | Monitoring des appels IA (provider, tokens, latency, success) |
+| Table | Rôle | Statut |
+|---|---|---|
+| `profiles` | Utilisateurs (id, email, password_hash, credits, plan, locale) | ✅ |
+| `generations` | Historique des packs (user_id, score, paths, langues) | ✅ (fix appliqué) |
+| `payments` | Paiements (provider, transaction_id, amount, status, credits) | ✅ |
+| `relances` | Relances programmables (user_id, scheduled_date, email_draft, status) | ✅ |
+| `ai_logs` | Monitoring des appels IA (provider, tokens, latency, success) | ✅ |
+
+**RLS** : activé sur toutes les tables, bypassé par `service_role` (clé utilisée par le backend). Aucune policy n'est requise pour le bon fonctionnement tant qu'on passe par l'admin client.
 
 Schéma SQL : `backend/scripts/schema.sql` (créé via Supabase SQL Editor).
 
 ---
 
-## 5. MODÈLE ÉCONOMIQUE
+## 5. MODÈLE ÉCONOMIQUE (v2 — à appliquer)
 
-| Plan | Code | Prix | Crédits |
-|---|---|---|---|
-| Découverte | `free` | 0 € | 1/mois |
-| Essentiel | `essentiel` | 4,99 € | 5 |
-| Pro | `pro` | 14,99 €/mois | 30/mois |
-| Carrière | `carriere` | 39,99 €/mois | Illimité |
+### 5.1 Grille tarifaire validée (2026-10-14)
 
-**Canaux de paiement** : FedaPay (Mobile Money), Flutterwave (cartes), Raenest (crypto).
-**Encaissement** : tout au Bénin.
+| Plan | Code | Prix EUR | Prix XOF | Prix USD | Crédits | Cible |
+|---|---|---|---|---|---|---|
+| 🆓 Découverte | `free` | 0 € | 0 FCFA | 0 $ | 1 (unique) | Test |
+| 🎯 Express | `express` | 3 € | 2 000 FCFA | 3,50 $ | 1 | Impulsion |
+| ⭐ Candidature Active | `active` | 7,50 € | 5 000 FCFA | 8,50 $ | 5 | Best-seller |
+| 🚀 Recherche Intensive | `intensive` | 18 € | 12 000 FCFA | 20 $ | 15 | Engagement |
+| 💎 Pro Illimité | `pro_unlimited` | 22 €/mois | 15 000 FCFA/mois | 25 $/mois | Illimité | Récurrent |
+| 🏢 B2B | `b2b` | Sur devis | Sur devis | Sur devis | Volume | Écoles / ONG (Phase 10) |
+
+### 5.2 Différenciation fonctionnelle (Phase B — à venir)
+
+| Plan | Relance auto | Guide enrichi | Coaching IA | Support |
+|---|---|---|---|---|
+| 🆓 Découverte | ❌ | ❌ | ❌ | standard |
+| 🎯 Express | ❌ | ❌ | ❌ | standard |
+| ⭐ Candidature Active | ✅ | ✅ | ❌ | standard |
+| 🚀 Recherche Intensive | ✅ | ✅ | ✅ | prioritaire |
+| 💎 Pro Illimité | ✅ | ✅ | ✅ | VIP |
+
+**Note** : en Phase A (immédiate), la différenciation fonctionnelle n'est PAS appliquée. Tous les plans payants donnent accès aux mêmes fonctionnalités. La différenciation sera appliquée en Phase B après avoir observé les usages réels.
+
+### 5.3 Canaux de paiement
+- **FedaPay** : Mobile Money (MTN MoMo, Moov, Celtiis) + carte bancaire locale
+- **Flutterwave** : cartes internationales (Visa, Mastercard)
+- **Raenest** : USDT/USDC (crypto stablecoins)
+- **Encaissement** : tout au Bénin
+
+### 5.4 Filigrane sur plan gratuit
+Les packs générés par un utilisateur en plan `free` (Découverte) auront un discret filigrane en bas de page :
+> *"Généré gratuitement avec CandidatIA — candidatia.com"* (italique gris clair)
+
+Ce filigrane disparaît dès qu'un pack est acheté (Express ou supérieur).
 
 ---
 
-## 6. CONFORMITÉ LÉGALE (BÉNIN)
+## 6. GUIDE D'ENTRETIEN ENRICHI (GUIDE-v2)
 
-### 6.1 Applicabilité
+### 6.1 Structure en 8 phases
+
+1. **Préparation** : checklist logistique + recherche entreprise + pitch 30 s
+2. **Introduction** : brise-glace, structuration de la présentation
+3. **Parcours et motivation** : "Parlez-moi de vous", "Pourquoi ce poste ?", etc.
+4. **Compétences techniques** : questions métier + mises en situation
+5. **Comportemental (STAR)** : conflits, échecs, leadership, initiative
+6. **Questions pièges et pression** : "votre faiblesse", "pourquoi nous", etc.
+7. **Vos questions** : par interlocuteur (RH, manager, dirigeant)
+8. **Clôture et négociation** : salaire, date de démarrage, question finale
+
+### 6.2 Contenu par question
+- **Intention cachée du recruteur** (décryptage psychologique)
+- **Stratégie de réponse** (script tactique)
+- **Exemple de réponse cadre** (2-4 phrases déjà rédigées, personnalisées avec le CV)
+
+### 6.3 Architecture technique
+- **Prompt enrichi** : `backend/app/services/ai/prompts/guide_prompt.py`
+- **Validator + fallback** : `backend/app/services/ai/guide_validator.py`
+- **Schémas Pydantic** : `GuideData`, `GuidePhase`, `GuideQuestion`, `GuidePiege`, etc. dans `schemas.py`
+- **Générateur Word dense** : `backend/app/services/generation/word_guide.py` (format 10-15 pages, mise en forme experte)
+
+### 6.4 Adaptation culturelle
+Chaque `locale_map` contient maintenant :
+- `interview_style` : collaboratif, direct, hiérarchique, etc.
+- `interview_duration_minutes` : 45 min (US) → 90 min (JP)
+- `salary_negotiation_style` : direct, indirect, jamais abordé
+- `interview_technical_depth` : standard, élevé
+
+---
+
+## 7. CONFORMITÉ LÉGALE (BÉNIN)
+
+### 7.1 Applicabilité
 CandidatIA est soumise au **Code du numérique du Bénin (Loi n° 2017-20 du 20 avril 2018)** car :
 - Elle cible des utilisateurs au Bénin (support XOF, Mobile Money, français)
 - Elle traite des données de personnes situées au Bénin
 - Elle encaisse via des providers béninois
 
-### 6.2 Obligations identifiées
+### 7.2 Obligations identifiées
 
 | Obligation | Base légale | Statut |
 |---|---|---|
@@ -301,22 +355,21 @@ CandidatIA est soumise au **Code du numérique du Bénin (Loi n° 2017-20 du 20 
 | Contrats de sous-traitance | Art. 426 | ⏳ À faire |
 | Encadrement transferts hors Bénin | Art. 391+ | ⏳ À documenter |
 
-### 6.3 Droits utilisateurs à garantir
-
+### 7.3 Droits utilisateurs à garantir
 - **Accès** : réponse ≤ 60 jours
 - **Opposition** (prospection) : réponse ≤ 30 jours
 - **Rectification / Suppression** : réponse ≤ 45 jours
 - **Portabilité** : format structuré
 
-### 6.4 Coordonnées APDP
+### 7.4 Coordonnées APDP
 APDP – Rue 6.076, Aidjèdo, Immeuble El MARZOUK Joël, Cotonou
 Tél : (+229) 21 32 57 88 — Email : contact@apdp.bj — Web : www.apdp.bj
 
 ---
 
-## 7. CONFIGURATION
+## 8. CONFIGURATION
 
-### 7.1 Variables backend (`backend/.env`)
+### 8.1 Variables backend (`backend/.env`)
 
 ```bash
 # App
@@ -326,20 +379,20 @@ SECRET_KEY=<32+ caractères>
 JWT_ALGORITHM=HS256
 JWT_EXPIRATION_MINUTES=60
 
-# IA
-GROQ_API_KEY=<clé>
+# IA (ordre de fallback)
+GROQ_API_KEY=<clé>            # recommandé : clé principale valide
 GEMINI_API_KEY=<clé>
 MISTRAL_API_KEY=<clé>
-COHERE_API_KEY=<clé>
+COHERE_API_KEY=<clé>          # ⚠️ actuellement invalide → régénérer
 AI_PROVIDER_ORDER=groq,gemini,mistral,cohere
 
 # Supabase
-SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_URL=https://uftodzmoktbxbgfdotgn.supabase.co
 SUPABASE_ANON_KEY=<clé>
-SUPABASE_SERVICE_KEY=<clé>
+SUPABASE_SERVICE_KEY=<clé>    # utilisé par le backend (bypass RLS)
 DATABASE_URL=postgresql://postgres.xxx:xxx@...
 
-# Redis
+# Redis (⚠️ actuellement indisponible → debug recommandé)
 REDIS_URL=redis://localhost:6379
 
 # Brevo
@@ -347,7 +400,7 @@ BREVO_API_KEY=<clé>
 BREVO_SENDER_EMAIL=<email vérifié>
 BREVO_SENDER_NAME=CandidatIA
 
-# FedaPay
+# FedaPay (sandbox actif, testé)
 FEDAPAY_SECRET_KEY=sk_sandbox_xxx
 FEDAPAY_PUBLIC_KEY=pk_sandbox_xxx
 FEDAPAY_ENV=sandbox
@@ -374,19 +427,19 @@ LOCAL_STORAGE_PATH=./fichiers_generes
 MAX_FILE_SIZE_MB=10
 ```
 
-### 7.2 Variables frontend (`frontend/.env.local`)
+### 8.2 Variables frontend (`frontend/.env.local`)
 
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://uftodzmoktbxbgfdotgn.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<clé>
 ```
 
 ---
 
-## 8. LANCEMENT EN LOCAL
+## 9. LANCEMENT EN LOCAL
 
-### 8.1 Backend
+### 9.1 Backend
 ```powershell
 cd backend
 .\venv\Scripts\Activate.ps1
@@ -396,14 +449,14 @@ uvicorn app.main:app --reload
 - Docs : http://localhost:8000/docs
 - Health : http://localhost:8000/health
 
-### 8.2 Frontend
+### 9.2 Frontend
 ```powershell
 cd frontend
 npm run dev
 ```
 - Frontend : http://localhost:3000
 
-### 8.3 Tests
+### 9.3 Tests
 ```powershell
 # Backend
 cd backend
@@ -413,7 +466,7 @@ pytest -m integration -v
 
 ---
 
-## 9. DÉCISIONS D'ARCHITECTURE
+## 10. DÉCISIONS D'ARCHITECTURE
 
 1. **Orchestrateur IA multi-provider** : résilience (les modèles gratuits changent), performance, économie (cache).
 2. **FedaPay en priorité** : encaissement au Bénin, couverture Mobile Money, frais bas.
@@ -421,22 +474,47 @@ pytest -m integration -v
 4. **Texte sans accents dans le code** : contournement des problèmes d'encodage Windows.
 5. **Fallback OCR en cascade** : pypdf → pdfplumber → Tesseract + PyMuPDF.
 6. **Titres Word traduits par dictionnaire** : `TITLES`, `CV_TITLES`, `LETTRE_TITLES`, `RELANCE_TITLES`.
+7. **Sauvegarde systématique après génération** : toute génération réussie insère une ligne dans `generations` (fix du 2026-10-14).
+8. **Validator + fallback guide** : si l'IA omet des sections du guide, le validator les enrichit avec des templates contextualisés.
+9. **Grille tarifaire 5 plans B2C** : Découverte (gratuit) + Express + Candidature Active + Recherche Intensive + Pro Illimité.
+10. **Filigrane sur plan gratuit** : incite à l'achat tout en permettant un test complet.
 
 ---
 
-## 10. DETTES TECHNIQUES CONNUES
+## 11. DETTES TECHNIQUES CONNUES
 
 | Dette | Impact | Priorité |
 |---|---|---|
+| Redis indisponible (`redis_unavailable`) | Élevé (pas de cache IA → coût + latence) | 🔴 Haute |
+| Clé Cohere invalide (401) | Moyen (fallback fonctionne sur Groq) | 🟡 Moyenne |
 | Warnings Pydantic V2 (`json_encoders`, `Config`) | Aucun | Basse |
-| Non-compatibilité Stripe Bénin | Utilisation de FedaPay | Résolu |
 | `test_*.py` à la racine backend (obsolètes) | Aucun | Basse |
 | Absence de rate limiting avancé | Moyen | Moyenne |
 | Pas de tests frontend (Jest/Playwright) | Moyen | Moyenne |
+| Différenciation fonctionnelle par plan non implémentée | Moyen | Moyenne (Phase B) |
+| Filigrane plan gratuit non implémenté | Moyen | Haute (PRICING-v2) |
+| Plan Pro Illimité non implémenté (abonnement manuel) | Moyen | Haute (PRICING-v2) |
+| Aucun endpoint de téléchargement d'un ancien pack | Bas | Basse |
+| Pagination/filtres sur l'historique | Bas | Basse |
 
 ---
 
-## 11. PROCHAINES ÉTAPES
+## 12. PROCHAINES ÉTAPES
+
+### Phase PRICING-v2 — Nouvelle grille tarifaire
+- [ ] Backup automatique des fichiers concernés
+- [ ] Réécriture de `plans.py` avec les 5 plans (Découverte, Express, Candidature Active, Recherche Intensive, Pro Illimité)
+- [ ] Alignement de `quota_service.py` (PLAN_QUOTAS)
+- [ ] Ajout du champ `is_free_tier` dans `user.py` + migration SQL
+- [ ] Nouveau user a `is_free_tier = true` par défaut
+- [ ] Filigrane conditionnel dans `word_cv.py` et `word_guide.py`
+- [ ] Propagation du flag dans `pack_builder.py` et `generation.py`
+- [ ] Mise à jour de la landing (`page.tsx`) avec les 5 plans
+- [ ] Mise à jour des traductions (`fr.json`, `en.json`)
+- [ ] Mise à jour de `billing/page.tsx` (5 plans au lieu de 3)
+- [ ] Mise à jour de `PlanCard.tsx` (support 5 plans + badge)
+- [ ] Mise à jour de `context.md`
+- [ ] Script de validation `verify-pricing-v2.py`
 
 ### Phase 8 — Déploiement production
 - [ ] Backend sur Render.com (Web Service + Cron Job)
@@ -445,6 +523,7 @@ pytest -m integration -v
 - [ ] Webhooks FedaPay/Flutterwave/Raenest configurés avec URL publique
 - [ ] Scheduler cron configuré (appel quotidien `/api/scheduler/run`)
 - [ ] Domaine personnalisé (optionnel)
+- [ ] **Debug Redis** (Upstash en production)
 
 ### Phase 9 — Conformité APDP
 - [ ] Effectuer la déclaration APDP (https://www.apdp.bj)
@@ -454,31 +533,34 @@ pytest -m integration -v
 - [ ] Implémenter le consentement marketing explicite
 - [ ] Préparer le rapport annuel (avant 30 juin)
 
-### Phase 10 — Marketing
+### Phase 10 — Marketing + B2B
 - [ ] Landing SEO multilingue
 - [ ] Blog articles
 - [ ] Programme d'affiliation
 - [ ] Analytics (Plausible ou Umami)
+- [ ] Offre B2B (écoles, ONG, cabinets)
+- [ ] Dashboard admin B2B
+- [ ] API publique + white-label
 
 ---
 
-## 12. RISQUES ET MITIGATIONS
+## 13. RISQUES ET MITIGATIONS
 
 | Risque | Impact | Mitigation |
 |---|---|---|
 | Provider IA tombe | Élevé | Fallback cascade + circuit breaker |
 | Sanction APDP | Élevé | Déclaration + registre + conformité |
 | FedaPay/Flutterwave refuse KYC | Élevé | Backup Paystack + CinetPay |
-| Abus free tier | Moyen | Email vérifié + fingerprint + rate limit |
-| Coût IA explose | Moyen | Cache + monitoring `ai_logs` |
+| Abus free tier | Élevé | 1 pack unique + email vérifié + fingerprint |
+| Coût IA explose | Moyen | Cache Redis (à réparer) + monitoring `ai_logs` |
 | Attaque DDoS | Faible | Vercel + Render + Cloudflare |
 
 ---
 
-## 13. RESSOURCES
+## 14. RESSOURCES
 
 - **Repo** : local (C:\Users\togninoubi.aho\Desktop\projets\CandidatIA\candidatia)
-- **Tags Git** : `phase-6-complete`
+- **Tags Git** : `phase-6-complete`, `fix-history`, `pricing-v2-pending`
 - **Supabase** : https://uftodzmoktbxbgfdotgn.supabase.co
 - **FedaPay** : https://dashboard.fedapay.com
 - **Render** : https://dashboard.render.com (à venir)
@@ -487,7 +569,7 @@ pytest -m integration -v
 
 ---
 
-## 14. HISTORIQUE DES VERSIONS
+## 15. HISTORIQUE DES VERSIONS
 
 | Version | Date | Événement |
 |---|---|---|
@@ -498,7 +580,8 @@ pytest -m integration -v
 | 0.5.0 | 2026-09-30 | Phase 5 : Paiement multi-canal |
 | 0.6.0 | 2026-10-01 | Phase 6 : Relance + scheduler + emails |
 | 0.7.0 | 2026-10-01 | Phase 7 : Frontend complet |
-| **0.8.0** | **2026-10-01** | **Phase 7e-legal + Conformité Bénin identifiée** |
+| 0.8.0 | 2026-10-01 | Phase 7e-legal + Conformité Bénin identifiée |
+| **0.9.0** | **2026-10-14** | **Fix historique + Guide enrichi 8 phases + Nouvelle grille tarifaire** |
 
 ---
 
@@ -507,32 +590,36 @@ pytest -m integration -v
 
 ---
 
-## 三、Prochaines étapes pour la nouvelle conversation
+## 📋 Récapitulatif des changements dans cette version 0.9.0
 
-1. **Copie ce `context.md`** dans ton projet (`docs/context.md`)
-2. **Commit Git** :
-   ```powershell
-   git add docs/context.md
-   git commit -m "docs: Mise a jour context.md (v0.8.0 - Frontend complet + conformite Benin)"
-   ```
-3. **Ouvre une nouvelle conversation** et commence par :
-
-> "Je continue le projet CandidatIA. Voici le fichier context.md de référence : [colle le contenu]. Je veux maintenant faire la Phase 8 (déploiement production)."
+| Section | Changement |
+|---|---|
+| **En-tête** | Version 0.8.0 → **0.9.0** |
+| **2.1 Roadmap** | Ajout des phases `FIX-historique`, `FIX-billing`, `GUIDE-v2`, `PRICING-v2` |
+| **2.2 Capacités** | Ajout : guide 8 phases, validator, historique sauvegardé, mapping culturel entretien |
+| **3.2 Structure** | Ajout de `guide_validator.py` et annotations des fichiers modifiés |
+| **4. DB** | Note sur RLS et bypass par `service_role` |
+| **5. Modèle économique** | **Refonte complète** : 5 plans B2C + tableau de différenciation fonctionnelle + filigrane |
+| **6. Guide enrichi (NOUVEAU)** | Section entièrement nouvelle documentant GUIDE-v2 |
+| **7. Conformité** | Inchangé (Phase 9 à venir) |
+| **10. Décisions** | Ajout des décisions 7, 8, 9, 10 (sauvegarde, validator, pricing, filigrane) |
+| **11. Dettes** | Ajout : Redis, Cohere, différenciation fonctionnelle, filigrane, Pro Illimité |
+| **12. Prochaines étapes** | Ajout de la section PRICING-v2 détaillée + Phase 10 étendue B2B |
+| **13. Risques** | Ajout : abus free tier |
+| **15. Historique** | Version 0.9.0 documentée |
 
 ---
 
-## 四、État final du projet
+## 🚀 Prochaine action
 
-| Aspect | Statut |
-|---|---|
-| Backend (FastAPI) | ✅ 176 tests passent |
-| Frontend (Next.js) | ✅ Complet (auth, dashboard, générateur, paiement, relances) |
-| Landing page | ✅ Enrichie (hero, features, pricing, FAQ) |
-| Pages légales | ✅ Conformes au Code du numérique du Bénin |
-| Cookie banner | ✅ Implémenté |
-| Paiement | ✅ FedaPay sandbox testé |
-| Multilingue | ✅ FR + EN (documents et interface) |
-| **Déploiement** | ⏳ Phase 8 |
-| **Conformité APDP** | ⏳ Phase 9 |
+Ce fichier `context.md` est prêt à être **copié dans `docs/context.md`** et commité :
 
-**Le SaaS est prêt à 95%. Il reste le déploiement et la conformité APDP.**
+```powershell
+# Depuis la racine du projet
+Copy-Item "chemin\vers\ce\fichier.md" "docs\context.md" -Force
+
+git add docs/context.md
+git commit -m "docs: context.md v0.9.0 (fix historique + guide enrichi + pricing v2)"
+```
+
+Une fois ce commit fait, **dis-moi "go PRICING-v2"** et je te livre le script `setup-pricing-v2.js` complet et testé pour appliquer la nouvelle grille tarifaire.

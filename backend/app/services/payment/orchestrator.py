@@ -60,21 +60,11 @@ class PaymentOrchestrator:
         customer_name: Optional[str] = None,
         locale: str = "fr",
     ) -> Dict[str, Any]:
-        """
-        Cree une session de paiement.
-        Retourne un dict avec :
-          - payment_id : ID en DB
-          - checkout_url : URL/Adresse pour payer
-          - provider : nom du provider
-          - amount : montant
-          - currency : devise
-        """
-        # 1. Verifier le plan
+        """Cree une session de paiement."""
         plan = get_plan(plan_code)
         if not plan:
             raise NotFoundError(message=f"Plan inconnu : {plan_code}")
 
-        # 2. Verifier le provider
         provider = self.get_provider(provider_name)
         if not provider.is_available():
             raise PaymentError(
@@ -82,11 +72,9 @@ class PaymentOrchestrator:
                 details={"provider": provider_name},
             )
 
-        # 3. Calculer le montant
         amount = get_price_for_provider(plan_code, provider_name)
         currency = get_currency_for_provider(provider_name)
 
-        # 4. Creer l intention de paiement
         intent = PaymentIntent(
             user_id=user_id,
             amount=amount,
@@ -100,7 +88,6 @@ class PaymentOrchestrator:
             metadata={"plan_name": plan["name"]},
         )
 
-        # 5. Appeler le provider
         try:
             result: PaymentResult = provider.safe_checkout(intent)
         except PaymentError:
@@ -112,7 +99,6 @@ class PaymentOrchestrator:
                 details={"provider": provider_name},
             ) from e
 
-        # 6. Enregistrer en DB
         payment_record = insert_row(
             "payments",
             {
@@ -158,15 +144,9 @@ class PaymentOrchestrator:
         headers: Dict[str, str],
         body: bytes,
     ) -> Dict[str, Any]:
-        """
-        Traite un webhook provider.
-        - Verifie la signature
-        - Met a jour le paiement en DB
-        - Ajoute les credits si succes
-        """
+        """Traite un webhook provider."""
         provider = self.get_provider(provider_name)
 
-        # 1. Verifier la signature et extraire le payload
         try:
             payload: WebhookPayload = provider.verify_webhook(headers, body)
         except PaymentError:
@@ -182,7 +162,6 @@ class PaymentOrchestrator:
             status=payload.status.value,
         )
 
-        # 2. Trouver le paiement en DB
         payments = select_rows(
             "payments",
             filters={"provider_transaction_id": payload.provider_transaction_id},
@@ -199,12 +178,10 @@ class PaymentOrchestrator:
         payment = payments[0]
         current_status = payment.get("status", "pending")
 
-        # 3. Idempotence : ne rien faire si deja traite
         if current_status == "success":
             logger.info("webhook_already_processed", payment_id=payment.get("id"))
             return {"status": "already_processed", "payment_id": payment.get("id")}
 
-        # 4. Mettre a jour le statut
         new_status = payload.status.value
         update_row(
             "payments",
@@ -219,7 +196,6 @@ class PaymentOrchestrator:
             },
         )
 
-        # 5. Si succes, ajouter les credits
         if payload.status == PaymentStatus.SUCCESS:
             try:
                 user_id = payment["user_id"]
@@ -260,7 +236,6 @@ class PaymentOrchestrator:
         Verifie le statut reel d une transaction aupres du provider
         et credite l utilisateur si approuve.
         """
-        # 1. Trouver le paiement en DB
         payments = select_rows(
             "payments",
             filters={"provider_transaction_id": transaction_id},
@@ -278,7 +253,6 @@ class PaymentOrchestrator:
 
         current_status = payment.get("status", "pending")
 
-        # 2. Idempotence
         if current_status == "success":
             logger.info("payment_already_verified", payment_id=payment["id"])
             return {
@@ -288,7 +262,6 @@ class PaymentOrchestrator:
                 "new_status": current_status,
             }
 
-        # 3. Verifier aupres du provider
         provider = self.get_provider(payment["provider"])
         real_status = provider.get_transaction_status(transaction_id)
 
@@ -299,7 +272,6 @@ class PaymentOrchestrator:
             real_status=real_status.get("status"),
         )
 
-        # 4. Mapper le statut FedaPay -> statut interne
         status_map = {
             "approved": "success",
             "transferred": "success",
@@ -310,7 +282,6 @@ class PaymentOrchestrator:
         }
         new_status = status_map.get(real_status.get("status", "").lower(), "pending")
 
-        # 5. Mettre a jour le paiement
         update_row(
             "payments",
             {"id": payment["id"]},
@@ -325,7 +296,6 @@ class PaymentOrchestrator:
             },
         )
 
-        # 6. Si succes, crediter l utilisateur
         if new_status == "success":
             credits = payment.get("credits_added", 0)
             if credits > 0:
@@ -345,14 +315,11 @@ class PaymentOrchestrator:
         }
 
 
-# ============================================================
 # Singleton
-# ============================================================
 _orchestrator: Optional[PaymentOrchestrator] = None
 
 
 def get_payment_orchestrator() -> PaymentOrchestrator:
-    """Retourne l instance unique de l orchestrateur."""
     global _orchestrator
     if _orchestrator is None:
         _orchestrator = PaymentOrchestrator()

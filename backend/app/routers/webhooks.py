@@ -82,9 +82,10 @@ async def fedapay_webhook(request: Request) -> Response:
         )
         # On retourne quand meme 200 pour eviter les retries,
         # mais on log l erreur
+        status_code = 200 if "invalide" in str(e).lower() else 400
         return JSONResponse(
             content={"status": "error", "message": str(e)},
-            status_code=200,
+            status_code=status_code,
         )
     except Exception as e:
         logger.exception("fedapay_webhook_unexpected_error", error=str(e))
@@ -123,9 +124,10 @@ async def flutterwave_webhook(request: Request) -> Response:
         )
     except PaymentError as e:
         logger.warning("flutterwave_webhook_error", error=str(e))
+        status_code = 200 if "invalide" in str(e).lower() else 400
         return JSONResponse(
             content={"status": "error", "message": str(e)},
-            status_code=200,
+            status_code=status_code,
         )
     except Exception as e:
         logger.exception("flutterwave_webhook_unexpected_error", error=str(e))
@@ -163,9 +165,10 @@ async def raenest_webhook(request: Request) -> Response:
         )
     except PaymentError as e:
         logger.warning("raenest_webhook_error", error=str(e))
+        status_code = 200 if "invalide" in str(e).lower() else 400
         return JSONResponse(
             content={"status": "error", "message": str(e)},
-            status_code=200,
+            status_code=status_code,
         )
     except Exception as e:
         logger.exception("raenest_webhook_unexpected_error", error=str(e))

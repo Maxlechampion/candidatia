@@ -3,6 +3,12 @@ Mapping langue -> conventions culturelles du marche cible.
 
 Determine comment un CV / une lettre doit etre formate selon
 le pays ou la culture cible.
+
+Inclut egalement les conventions d entretien :
+  - interview_style : style dominant (collaboratif, direct, hierarchique, etc.)
+  - interview_duration_minutes : duree typique d un 1er entretien
+  - salary_negotiation_style : comment aborder la question salariale
+  - interview_technical_depth : niveau d exigence technique attendu
 """
 
 from typing import Any, Dict
@@ -21,6 +27,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 400,
         "date_format": "DD/MM/YYYY",
         "tone": "formel",
+        # --- Conventions d entretien ---
+        "interview_style": "collaboratif_occidental",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
     "en": {
         "language_code": "en",
@@ -34,6 +45,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 350,
         "date_format": "MM/DD/YYYY",
         "tone": "direct_professionnel",
+        # --- Conventions d entretien ---
+        "interview_style": "direct_anglo_saxon",
+        "interview_duration_minutes": 45,
+        "salary_negotiation_style": "direct",
+        "interview_technical_depth": "eleve",
     },
     "es": {
         "language_code": "es",
@@ -47,6 +63,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 400,
         "date_format": "DD/MM/YYYY",
         "tone": "formel",
+        # --- Conventions d entretien ---
+        "interview_style": "relationnel_chaleureux",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
     "pt": {
         "language_code": "pt",
@@ -60,6 +81,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 400,
         "date_format": "DD/MM/YYYY",
         "tone": "formel",
+        # --- Conventions d entretien ---
+        "interview_style": "relationnel_chaleureux",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
     "de": {
         "language_code": "de",
@@ -73,6 +99,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 450,
         "date_format": "DD.MM.YYYY",
         "tone": "tres_formel",
+        # --- Conventions d entretien ---
+        "interview_style": "structure_et_formel",
+        "interview_duration_minutes": 75,
+        "salary_negotiation_style": "tres_indirect",
+        "interview_technical_depth": "eleve",
     },
     "it": {
         "language_code": "it",
@@ -86,6 +117,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 400,
         "date_format": "DD/MM/YYYY",
         "tone": "formel",
+        # --- Conventions d entretien ---
+        "interview_style": "relationnel_chaleureux",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
     "nl": {
         "language_code": "nl",
@@ -99,6 +135,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 350,
         "date_format": "DD-MM-YYYY",
         "tone": "direct_professionnel",
+        # --- Conventions d entretien ---
+        "interview_style": "direct_anglo_saxon",
+        "interview_duration_minutes": 45,
+        "salary_negotiation_style": "direct",
+        "interview_technical_depth": "standard",
     },
     "ar": {
         "language_code": "ar",
@@ -112,6 +153,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 350,
         "date_format": "DD/MM/YYYY",
         "tone": "formel_respectueux",
+        # --- Conventions d entretien ---
+        "interview_style": "relationnel_chaleureux",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
     "zh-cn": {
         "language_code": "zh-cn",
@@ -125,6 +171,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 300,
         "date_format": "YYYY-MM-DD",
         "tone": "humble_respectueux",
+        # --- Conventions d entretien ---
+        "interview_style": "hierarchique_respectueux",
+        "interview_duration_minutes": 75,
+        "salary_negotiation_style": "jamais_aborde_directement",
+        "interview_technical_depth": "eleve",
     },
     "ja": {
         "language_code": "ja",
@@ -138,6 +189,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 300,
         "date_format": "YYYY-MM-DD",
         "tone": "tres_formel_respectueux",
+        # --- Conventions d entretien ---
+        "interview_style": "hierarchique_respectueux",
+        "interview_duration_minutes": 90,
+        "salary_negotiation_style": "jamais_aborde_directement",
+        "interview_technical_depth": "standard",
     },
     "ko": {
         "language_code": "ko",
@@ -151,6 +207,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 350,
         "date_format": "YYYY-MM-DD",
         "tone": "formel_respectueux",
+        # --- Conventions d entretien ---
+        "interview_style": "hierarchique_respectueux",
+        "interview_duration_minutes": 75,
+        "salary_negotiation_style": "jamais_aborde_directement",
+        "interview_technical_depth": "eleve",
     },
     "ru": {
         "language_code": "ru",
@@ -164,6 +225,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 400,
         "date_format": "DD.MM.YYYY",
         "tone": "formel",
+        # --- Conventions d entretien ---
+        "interview_style": "structure_et_formel",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "eleve",
     },
     "tr": {
         "language_code": "tr",
@@ -177,6 +243,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 400,
         "date_format": "DD.MM.YYYY",
         "tone": "formel",
+        # --- Conventions d entretien ---
+        "interview_style": "relationnel_chaleureux",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
     "hi": {
         "language_code": "hi",
@@ -190,6 +261,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 350,
         "date_format": "DD/MM/YYYY",
         "tone": "formel_respectueux",
+        # --- Conventions d entretien ---
+        "interview_style": "hierarchique_respectueux",
+        "interview_duration_minutes": 60,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
     "wo": {
         "language_code": "wo",
@@ -203,6 +279,11 @@ LOCALE_CONVENTIONS: Dict[str, Dict[str, Any]] = {
         "letter_max_words": 350,
         "date_format": "DD/MM/YYYY",
         "tone": "formel",
+        # --- Conventions d entretien ---
+        "interview_style": "relationnel_chaleureux",
+        "interview_duration_minutes": 45,
+        "salary_negotiation_style": "indirect",
+        "interview_technical_depth": "standard",
     },
 }
 
@@ -218,6 +299,11 @@ DEFAULT_LOCALE: Dict[str, Any] = {
     "letter_max_words": 350,
     "date_format": "MM/DD/YYYY",
     "tone": "direct_professionnel",
+    # --- Conventions d entretien (par defaut) ---
+    "interview_style": "collaboratif_occidental",
+    "interview_duration_minutes": 60,
+    "salary_negotiation_style": "direct",
+    "interview_technical_depth": "standard",
 }
 
 
