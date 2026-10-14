@@ -36,9 +36,21 @@ function Test-Endpoint {
             $script:failed++
         }
     } catch {
-        $status = $_.Exception.Response.StatusCode.value__
-        Write-Host "[FAIL] $Name -> erreur ($status)" -ForegroundColor Red
-        $script:failed++
+        # Recuperer le code HTTP meme en cas d'exception
+        $actualStatus = $null
+        if ($_.Exception.Response) {
+            $actualStatus = [int]$_.Exception.Response.StatusCode.value__
+        }
+
+        # Si on attendait ce code, c'est un SUCCES
+        if ($actualStatus -eq $ExpectedStatus) {
+            Write-Host "[ OK ] $Name -> $actualStatus (attendu)" -ForegroundColor Green
+            $script:passed++
+        } else {
+            $displayStatus = if ($actualStatus) { $actualStatus } else { "erreur reseau" }
+            Write-Host "[FAIL] $Name -> $displayStatus (attendu $ExpectedStatus)" -ForegroundColor Red
+            $script:failed++
+        }
     }
     return $null
 }
