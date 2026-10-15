@@ -38,12 +38,13 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
-# ============ Généré ============
-fichiers_generes/
+# ============ Fichiers generes (specifique au dossier) ============
+backend/fichiers_generes/
+frontend/fichiers_generes/
 *.zip
-*.docx
-*.pdf
-!scripts/**/*.docx
+
+# ============ Backups automatiques ============
+.backups/
 
 # ============ Secrets ============
 *.pem
@@ -57,5 +58,3 @@ secrets/
 *.log
 npm-debug.log*
 yarn-error.log*
-# Backups automatiques des scripts
-.backups/
