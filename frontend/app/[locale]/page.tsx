@@ -1,15 +1,8 @@
 import { useTranslations } from "next-intl";
-import { unstable_setRequestLocale } from "next-intl/server";
 import Link from "next/link";
 import { LandingFooter } from "@/components/Layout/LandingFooter";
 
-export default function HomePage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
-  unstable_setRequestLocale(locale);
-
+export default function HomePage() {
   const t = useTranslations("landing");
 
   const features = [
@@ -26,25 +19,62 @@ export default function HomePage({
 
   const plans = [
     {
+      code: "free",
       name: t("plan_free_name"),
       price: "0",
       features: [t("plan_free_f1"), t("plan_free_f2"), t("plan_free_f3")],
       cta: t("plan_free_cta"),
       highlighted: false,
+      isFree: true,
     },
     {
-      name: t("plan_essentiel_name"),
-      price: "4.99",
-      features: [t("plan_essentiel_f1"), t("plan_essentiel_f2"), t("plan_essentiel_f3")],
-      cta: t("plan_essentiel_cta"),
+      code: "express",
+      name: t("plan_express_name"),
+      price: "3",
+      features: [t("plan_express_f1"), t("plan_express_f2"), t("plan_express_f3")],
+      cta: t("plan_express_cta"),
       highlighted: false,
+      isFree: false,
     },
     {
-      name: t("plan_pro_name"),
-      price: "14.99",
-      features: [t("plan_pro_f1"), t("plan_pro_f2"), t("plan_pro_f3"), t("plan_pro_f4")],
-      cta: t("plan_pro_cta"),
+      code: "active",
+      name: t("plan_active_name"),
+      price: "7.50",
+      features: [
+        t("plan_active_f1"),
+        t("plan_active_f2"),
+        t("plan_active_f3"),
+        t("plan_active_f4"),
+      ],
+      cta: t("plan_active_cta"),
       highlighted: true,
+      isFree: false,
+    },
+    {
+      code: "intensive",
+      name: t("plan_intensive_name"),
+      price: "18",
+      features: [
+        t("plan_intensive_f1"),
+        t("plan_intensive_f2"),
+        t("plan_intensive_f3"),
+      ],
+      cta: t("plan_intensive_cta"),
+      highlighted: false,
+      isFree: false,
+    },
+    {
+      code: "pro_unlimited",
+      name: t("plan_pro_unlimited_name"),
+      price: "22",
+      features: [
+        t("plan_pro_unlimited_f1"),
+        t("plan_pro_unlimited_f2"),
+        t("plan_pro_unlimited_f3"),
+      ],
+      cta: t("plan_pro_unlimited_cta"),
+      highlighted: false,
+      isFree: false,
     },
   ];
 
@@ -95,18 +125,6 @@ export default function HomePage({
           >
             {t("cta_secondary")}
           </Link>
-        </div>
-
-        <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-slate-500">
-          <div className="flex items-center gap-2">
-            <span className="text-emerald-500">OK</span> {t("trust_no_card")}
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-emerald-500">OK</span> {t("trust_free_pack")}
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-emerald-500">OK</span> {t("trust_fast")}
-          </div>
         </div>
       </section>
 
@@ -160,27 +178,37 @@ export default function HomePage({
           {t("pricing_subtitle")}
         </p>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {plans.map((plan, i) => (
+        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-7xl mx-auto">
+          {plans.map((plan) => (
             <div
-              key={i}
-              className={`relative p-6 rounded-xl border-2 ${
-                plan.highlighted ? "border-primary-500 shadow-lg" : "border-slate-200"
-              }`}
+              key={plan.code}
+              className={
+                "relative p-5 rounded-xl border-2 flex flex-col " +
+                (plan.highlighted
+                  ? "border-primary-500 shadow-lg"
+                  : plan.isFree
+                  ? "border-emerald-300"
+                  : "border-slate-200")
+              }
             >
               {plan.highlighted && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold text-white bg-primary-600 rounded-full">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold text-white bg-primary-600 rounded-full whitespace-nowrap">
                   {t("plan_popular")}
                 </span>
               )}
-              <h3 className="text-lg font-bold text-dark mb-2">{plan.name}</h3>
+              {plan.isFree && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold text-white bg-emerald-600 rounded-full whitespace-nowrap">
+                  {t("plan_free_badge")}
+                </span>
+              )}
+              <h3 className="text-base font-bold text-dark mb-2">{plan.name}</h3>
               <div className="mb-4">
-                <span className="text-4xl font-bold text-dark">{plan.price}</span>
-                <span className="text-slate-500 ml-1">EUR</span>
+                <span className="text-3xl font-bold text-dark">{plan.price}</span>
+                <span className="text-slate-500 ml-1 text-sm">EUR</span>
               </div>
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-2 mb-6 flex-1">
                 {plan.features.map((f, j) => (
-                  <li key={j} className="flex items-start gap-2 text-sm text-slate-600">
+                  <li key={j} className="flex items-start gap-2 text-xs text-slate-600">
                     <span className="text-emerald-500">-</span>
                     <span>{f}</span>
                   </li>
@@ -188,11 +216,14 @@ export default function HomePage({
               </ul>
               <Link
                 href="/register"
-                className={`block text-center py-2.5 rounded-lg font-semibold text-sm transition ${
-                  plan.highlighted
+                className={
+                  "block text-center py-2.5 rounded-lg font-semibold text-sm transition " +
+                  (plan.highlighted
                     ? "bg-primary-600 text-white hover:bg-primary-700"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
+                    : plan.isFree
+                    ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200")
+                }
               >
                 {plan.cta}
               </Link>

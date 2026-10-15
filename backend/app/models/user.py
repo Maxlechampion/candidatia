@@ -1,5 +1,4 @@
 """Modeles Pydantic : User."""
-
 from datetime import datetime
 from typing import Optional
 
@@ -31,6 +30,7 @@ class User(UserBase):
     id: str
     credits: int = 0
     plan: str = "free"
+    is_free_tier: bool = True
     email_verified: bool = False
     fedapay_customer_id: Optional[str] = None
     flutterwave_customer_id: Optional[str] = None

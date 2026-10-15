@@ -16,6 +16,7 @@ from docx.shared import Pt
 from app.core.logging import get_logger
 from app.services.generation.base import DocumentGenerator
 from app.services.generation.style import (
+    ajouter_filigrane_diagonal,
     ALIGN_CENTRE,
     ALIGN_JUSTIFIE,
     COULEUR_PRIMAIRE,
@@ -89,6 +90,43 @@ def _get_cv_titles(locale: dict) -> dict:
                 language_code = str(locale[key]).lower()
                 break
     return CV_TITLES.get(language_code, CV_TITLES["en"])
+
+
+
+
+def _safe_join_items(items, sep=", "):
+    """
+    Joint une liste dont les elements peuvent etre :
+      - des strings : "Francais"
+      - des dicts  : {"langue": "Francais", "niveau": "Natif"}
+      - des dicts generiques : {"nom": "X", "niveau": "Y"}
+    Retourne toujours une string jointe par sep.
+    """
+    if not items:
+        return ""
+    parts = []
+    for item in items:
+        if isinstance(item, str):
+            parts.append(item)
+        elif isinstance(item, dict):
+            # Essayer plusieurs cles usuelles
+            name = (
+                item.get("langue")
+                or item.get("nom")
+                or item.get("name")
+                or item.get("label")
+                or ""
+            )
+            level = item.get("niveau") or item.get("level") or ""
+            if name and level:
+                parts.append(f"{name} ({level})")
+            elif name:
+                parts.append(str(name))
+            else:
+                parts.append(str(item))
+        else:
+            parts.append(str(item))
+    return sep.join(parts)
 
 
 
@@ -187,7 +225,7 @@ class WordCVGenerator(DocumentGenerator):
                 r = p.add_run(titles["technical_label"])
                 r.bold = True
                 r.font.size = Pt(10)
-                p.add_run(", ".join(tech_skills))
+                p.add_run(_safe_join_items(tech_skills))
                 p.paragraph_format.space_after = Pt(2)
 
             if hum_skills:
@@ -195,7 +233,7 @@ class WordCVGenerator(DocumentGenerator):
                 r = p.add_run(titles["soft_label"])
                 r.bold = True
                 r.font.size = Pt(10)
-                p.add_run(", ".join(hum_skills))
+                p.add_run(_safe_join_items(hum_skills))
                 p.paragraph_format.space_after = Pt(2)
 
         # ============================================================
@@ -341,7 +379,7 @@ class WordCVGenerator(DocumentGenerator):
                 r = p.add_run(titles["languages_label"])
                 r.bold = True
                 r.font.size = Pt(9)
-                p.add_run(", ".join(langues)).font.size = Pt(9)
+                p.add_run(_safe_join_items(langues)).font.size = Pt(9)
                 p.paragraph_format.space_after = Pt(2)
 
             if centres:
@@ -349,7 +387,7 @@ class WordCVGenerator(DocumentGenerator):
                 r = p.add_run(titles["interests_label"])
                 r.bold = True
                 r.font.size = Pt(9)
-                p.add_run(", ".join(centres)).font.size = Pt(9)
+                p.add_run(_safe_join_items(centres)).font.size = Pt(9)
 
         logger.info(
             "word_cv_built",
@@ -358,5 +396,9 @@ class WordCVGenerator(DocumentGenerator):
             nb_formations=len(formations),
             country=locale.get("country", "unknown"),
         )
+
+        # Filigrane pour les utilisateurs gratuits
+        if locale.get("apply_watermark", False):
+            ajouter_filigrane_diagonal(doc, "CandidatIA - Genere gratuitement - candidatia.com", taille_pt=60, opacite="0.15")
 
         return doc

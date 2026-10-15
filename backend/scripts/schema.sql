@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     country_code TEXT,
     credits INT DEFAULT 1,
     plan TEXT DEFAULT 'free',
+    is_free_tier BOOLEAN DEFAULT TRUE,
     email_verified BOOLEAN DEFAULT FALSE,
     fedapay_customer_id TEXT,
     flutterwave_customer_id TEXT,
@@ -113,3 +114,9 @@ CREATE INDEX IF NOT EXISTS idx_ai_logs_prompt ON ai_logs(prompt_hash);
 -- ============================================================
 -- FIN DU SCHEMA
 -- ============================================================
+-- ============================================================
+-- MIGRATION PRICING-v2 (idempotent)
+-- ============================================================
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_free_tier BOOLEAN DEFAULT TRUE;
+UPDATE profiles SET is_free_tier = FALSE WHERE plan IN ('express', 'active', 'intensive', 'pro_unlimited');
+UPDATE profiles SET is_free_tier = TRUE WHERE plan = 'free' AND is_free_tier IS NULL;

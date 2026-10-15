@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 from app.core.database import insert_row, select_rows, update_row
 from app.core.errors import NotFoundError, PaymentError, ValidationError
 from app.core.logging import get_logger
-from app.services.auth.user_service import add_credits
+from app.services.auth.user_service import add_credits, mark_paid_tier
 from app.services.payment.base import PaymentProvider
 from app.services.payment.fedapay import FedaPayProvider
 from app.services.payment.flutterwave import FlutterwaveProvider
@@ -202,6 +202,10 @@ class PaymentOrchestrator:
                 credits = payment.get("credits_added", 0)
                 if credits > 0:
                     add_credits(user_id, credits)
+                    try:
+                        mark_paid_tier(user_id)
+                    except Exception as _e:
+                        logger.warning("mark_paid_tier_failed", error=str(_e))
                     logger.info(
                         "credits_added",
                         user_id=user_id,
@@ -300,6 +304,10 @@ class PaymentOrchestrator:
             credits = payment.get("credits_added", 0)
             if credits > 0:
                 add_credits(payment["user_id"], credits)
+                try:
+                    mark_paid_tier(payment["user_id"])
+                except Exception as _e:
+                    logger.warning("mark_paid_tier_failed", error=str(_e))
                 logger.info(
                     "credits_added",
                     user_id=payment["user_id"],

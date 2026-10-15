@@ -3,6 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -14,13 +15,70 @@ const LANGUAGES = [
   { code: "en", label: "English" },
   { code: "es", label: "Espanol" },
   { code: "de", label: "Deutsch" },
-  { code: "pt", label: "Portugues" },
+  { code: "pt", label: "Portugais" },
   { code: "ar", label: "Arabic" },
 ];
+
+// ============================================================
+// Encart dedie quand le quota est epuise
+// ============================================================
+function QuotaExceededBanner({
+  title,
+  description,
+  ctaPrimary,
+  ctaSecondary,
+}: {
+  title: string;
+  description: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
+}) {
+  return (
+    <div className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 p-6 md:p-8">
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-100">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-amber-700"
+          >
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5" />
+            <path d="M2 12l10 5 10-5" />
+          </svg>
+        </div>
+        <div className="flex-1">
+          <h2 className="text-lg font-bold text-amber-900 mb-1">{title}</h2>
+          <p className="text-sm text-amber-800 leading-relaxed mb-5">{description}</p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link href="/dashboard/billing">
+              <Button className="bg-amber-600 hover:bg-amber-700 text-white w-full sm:w-auto">
+                {ctaPrimary}
+              </Button>
+            </Link>
+            <Link href="/dashboard/billing">
+              <Button variant="outline" className="border-amber-300 text-amber-800 hover:bg-amber-100 w-full sm:w-auto">
+                {ctaSecondary}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function GeneratePage() {
   const router = useRouter();
   const t = useTranslations("generate");
+  const tq = useTranslations("quota");
 
   const [profilTexte, setProfilTexte] = useState("");
   const [offreTexte, setOffreTexte] = useState("");
@@ -29,6 +87,7 @@ export default function GeneratePage() {
   const [language, setLanguage] = useState("fr");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [quotaExceeded, setQuotaExceeded] = useState(false);
 
   function handleProfilFile(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files?.[0]) setProfilFile(e.target.files[0]);
@@ -41,6 +100,7 @@ export default function GeneratePage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
+    setQuotaExceeded(false);
 
     if (!profilFile && !profilTexte.trim()) {
       setError(t("error_profile"));
@@ -69,6 +129,7 @@ export default function GeneratePage() {
         responseType: "blob",
       });
 
+      // Telecharger le ZIP
       const blob = new Blob([response.data], { type: "application/zip" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -86,16 +147,30 @@ export default function GeneratePage() {
 
       router.push("/dashboard/history");
     } catch (err: any) {
-      let message = "Erreur lors de la generation.";
+      // 1. Verifier si c'est une erreur de quota (402 / QUOTA_EXCEEDED)
+      const status = err?.response?.status;
+      let payload: any = null;
+
       try {
         if (err.response?.data instanceof Blob) {
           const text = await err.response.data.text();
-          const json = JSON.parse(text);
-          message = json.detail || message;
-        } else if (err.response?.data?.detail) {
-          message = err.response.data.detail;
+          payload = JSON.parse(text);
+        } else if (err.response?.data) {
+          payload = err.response.data;
         }
       } catch {}
+
+      if (status === 402 || payload?.error_code === "QUOTA_EXCEEDED") {
+        setQuotaExceeded(true);
+        setLoading(false);
+        return;
+      }
+
+      // 2. Sinon erreur generique
+      const message =
+        payload?.detail ||
+        payload?.message ||
+        "Erreur lors de la generation.";
       setError(message);
     } finally {
       setLoading(false);
@@ -109,9 +184,18 @@ export default function GeneratePage() {
         <p className="text-slate-600">{t("subtitle")}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {error && <Alert variant="error">{error}</Alert>}
+      {quotaExceeded && (
+        <QuotaExceededBanner
+          title={tq("exceeded_title")}
+          description={tq("exceeded_description")}
+          ctaPrimary={tq("cta_primary")}
+          ctaSecondary={tq("cta_secondary")}
+        />
+      )}
 
+      {error && <Alert variant="error">{error}</Alert>}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>{t("step_profile")}</CardTitle>
@@ -129,7 +213,7 @@ export default function GeneratePage() {
               />
             </div>
 
-            <div className="text-center text-sm text-slate-400">{t("or_text") || "OU"}</div>
+            <div className="text-center text-sm text-slate-400">{t("or")}</div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -163,7 +247,7 @@ export default function GeneratePage() {
               />
             </div>
 
-            <div className="text-center text-sm text-slate-400">{t("or_text") || "OU"}</div>
+            <div className="text-center text-sm text-slate-400">{t("or")}</div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">

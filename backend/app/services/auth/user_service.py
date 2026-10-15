@@ -31,6 +31,7 @@ def create_user(email: str, password: str, full_name: Optional[str] = None) -> D
         "password_hash": password_hash,
         "credits": 1,
         "plan": "free",
+        "is_free_tier": True,
         "email_verified": False,
         "preferred_locale": "fr",
     }
@@ -89,3 +90,8 @@ def consume_credit(user_id: str) -> Dict[str, Any]:
         )
 
     return update_user(user_id, {"credits": credits - 1})
+
+
+def mark_paid_tier(user_id: str) -> Dict[str, Any]:
+    """Marque un utilisateur comme payant (retire le filigrane)."""
+    return update_user(user_id, {"is_free_tier": False})

@@ -1,20 +1,24 @@
-Voici le fichier `context.md` mis à jour en **version 0.9.0**, intégrant :
+# 📄 Mise à jour de `docs/context.md` vers v0.9.0
 
-- La nouvelle grille tarifaire validée (5 plans B2C + B2B reporté)
-- L'historique des packs générés **maintenant fonctionnel**
-- Le **guide d'entretien enrichi** (8 phases, validator, prompt v2)
-- Les corrections de bugs (billing, historique, i18n)
-- L'état du frontend et du backend à jour
+Je vais te livrer **le contenu complet du nouveau `docs/context.md`**, prêt à copier-coller.
 
 ---
+
+## 🎯 Action
+
+**Remplace tout le contenu** de `candidatia/docs/context.md` par le contenu ci-dessous.
+
+---
+
+## 📄 Contenu de `docs/context.md` (v0.9.0)
 
 ```markdown
 # context.md — Contexte global du projet CandidatIA
 
 > **Version** : 0.9.0
-> **Dernière mise à jour** : 2026-10-14
-> **Statut** : Historique + Guide enrichi opérationnels — Nouvelle grille tarifaire en cours d'application
-> **Tags Git** : `phase-7e-complete`, `fix-history`, `pricing-v2-pending`
+> **Dernière mise à jour** : 2026-10-15
+> **Statut** : PRICING-v2 appliqué (5 plans B2C) — Historique + Guide enrichi opérationnels
+> **Tags Git** : `phase-7e-complete`, `fix-history`, `pricing-v2-applied`, `fix-watermark`, `fix-quota-ux`
 
 ---
 
@@ -55,13 +59,15 @@ programmable) dans la langue choisie par l'utilisateur, avec un score de matchin
 | **7a-7f** | Frontend Next.js complet + i18n | — | ✅ Terminée |
 | **7e-legal** | Pages légales conformes au Code du numérique du Bénin | — | ✅ Terminée |
 | **FIX-historique** | Sauvegarde en DB + endpoint + affichage enrichi | — | ✅ Terminée (2026-10-14) |
-| **FIX-billing** | Chemins API `/api/billing/*` corrigés | — | ✅ Terminée (2026-10-14) |
+| **FIX-billing** | Chemins API `/api/billing/*` corrigés + array payments | — | ✅ Terminée (2026-10-15) |
 | **GUIDE-v2** | Guide d'entretien 8 phases + validator + prompt enrichi | — | ✅ Terminée (2026-10-14) |
-| **PRICING-v2** | Nouvelle grille tarifaire 5 plans B2C | — | ⏳ À appliquer |
+| **PRICING-v2** | Nouvelle grille tarifaire 5 plans B2C | 13 | ✅ **Terminée (2026-10-15)** |
+| **FIX-watermark** | Filigrane diagonal VML (rotation 315°, opacity 0.55) | — | ✅ Terminée (2026-10-15) |
+| **FIX-quota-ux** | Encart 402 QUOTA_EXCEEDED avec 2 CTA | — | ✅ Terminée (2026-10-15) |
 | **8** | Déploiement production (Vercel + Render) | — | ⏳ À venir |
 | **9** | Conformité APDP (déclaration + registre) | — | ⏳ À venir |
 | **10** | Marketing + B2B + itération | — | ⏳ À venir |
-| **TOTAL** | | **176+** | |
+| **TOTAL** | | **189+** | |
 
 ### 2.2 Capacités opérationnelles
 
@@ -69,32 +75,34 @@ programmable) dans la langue choisie par l'utilisateur, avec un score de matchin
 |---|---|
 | Ingestion PDF (texte + OCR), DOCX, ODT, RTF, HTML, MD, images | ✅ |
 | Détection langue (15 langues) + mapping culturel | ✅ |
-| Mapping conventions d'entretien par culture (nouveau) | ✅ |
+| Mapping conventions d'entretien par culture | ✅ |
 | Moteur IA fallback (Groq → Gemini → Mistral → Cohere) | ✅ |
 | Circuit breaker + cache Redis (recommandation : debug Redis) | ⚠️ |
 | Génération CV méthode STAR (multilingue) | ✅ |
 | Génération Lettre AIDA (multilingue) | ✅ |
-| **Génération Guide d'entretien 8 phases (nouveau)** | ✅ |
-| **Validator + enrichissement automatique du guide (nouveau)** | ✅ |
+| Génération Guide d'entretien 8 phases | ✅ |
+| Validator + enrichissement automatique du guide | ✅ |
 | Génération Brouillon relance (multilingue) | ✅ |
 | Assemblage ZIP | ✅ |
 | Auth JWT (register, login, /me) | ✅ |
-| Gestion crédits + quotas par plan | ✅ |
+| Gestion crédits + quotas par plan (5 plans B2C) | ✅ |
 | Protection de `/api/generate` | ✅ |
-| **Historique des packs (sauvegarde + affichage) (nouveau)** | ✅ |
+| Historique des packs (sauvegarde + affichage) | ✅ |
 | Statistiques utilisateur (total, score moyen) | ✅ |
 | Paiement Mobile Money (FedaPay sandbox) | ✅ |
 | Paiement carte (Flutterwave) | ✅ |
 | Paiement crypto (Raenest) | ✅ |
 | Webhooks sécurisés HMAC | ✅ |
-| Crédit automatique après paiement | ✅ |
+| Crédit automatique après paiement + `mark_paid_tier()` | ✅ |
 | Relances programmables (avec brouillon IA) | ✅ |
 | Scheduler quotidien | ✅ |
 | Rappels email automatiques (Brevo) | ✅ |
-| Landing page complète (hero, features, how, pricing, CTA) | ✅ |
+| Landing page complète (5 plans B2C) | ✅ |
 | Pages légales (CGU, Privacy, Cookies) | ✅ |
 | Bandeau de consentement cookies | ✅ |
 | Page 404 personnalisée | ✅ |
+| Filigrane diagonal VML (plan free uniquement) | ✅ |
+| Encart UX "Quota épuisé" (402 avec 2 CTA) | ✅ |
 | Configuration Vercel | ✅ |
 
 ---
@@ -119,10 +127,10 @@ programmable) dans la langue choisie par l'utilisateur, avec un score de matchin
 - Déploiement : Render.com
 
 **IA (fallback en cascade)**
-- Groq (Llama 3.3 70B ou gpt-oss-120b) — primary
+- Groq (gpt-oss-120b) — primary
 - Google Gemini (1.5 Flash)
 - Mistral (Small)
-- Cohere (Command R) — actuellement clé invalide, à régénérer
+- Cohere (Command R) — clé à régénérer
 
 **Ingestion**
 - pypdf + pdfplumber (PDF textuels)
@@ -131,7 +139,7 @@ programmable) dans la langue choisie par l'utilisateur, avec un score de matchin
 - odfpy (ODT), striprtf (RTF), BeautifulSoup (HTML)
 
 **Données**
-- Supabase Postgres (DB)
+- Supabase Postgres (DB) — colonne `is_free_tier` ajoutée
 - Upstash Redis (cache — actuellement indisponible)
 - Brevo (emails)
 
@@ -144,30 +152,20 @@ programmable) dans la langue choisie par l'utilisateur, avec un score de matchin
 
 ```
 candidatia/
-├── backend/              # FastAPI (176+ tests)
+├── backend/              # FastAPI (189+ tests)
 │   ├── app/
 │   │   ├── core/         # config, security, logging, telemetry, database, supabase_client
-│   │   ├── models/       # schémas Pydantic (user, generation, payment, relance, ai_log)
-│   │   ├── routers/      # endpoints FastAPI
-│   │   │   ├── auth.py
-│   │   │   ├── billing.py
-│   │   │   ├── generation.py         # → inclut _save_generation() (fix-historique)
-│   │   │   ├── generations.py        # → historique enrichi
-│   │   │   ├── health.py
-│   │   │   ├── ingestion.py
-│   │   │   ├── quota.py
-│   │   │   ├── relance.py
-│   │   │   ├── scheduler.py
-│   │   │   └── webhooks.py
+│   │   ├── models/       # user, generation, payment, relance, ai_log
+│   │   ├── routers/      # auth, billing, generation, generations, health, ingestion, quota, relance, scheduler, webhooks
 │   │   └── services/
 │   │       ├── ai/       # orchestrateur multi-provider + prompts
 │   │       │   ├── prompts/
-│   │       │   │   ├── cv_prompt.py
-│   │       │   │   ├── guide_prompt.py      # → enrichi 8 phases (GUIDE-v2)
+│   │       │   │   ├── cv_prompt.py         # + FORMAT STRICT listes
+│   │       │   │   ├── guide_prompt.py      # enrichi 8 phases
 │   │       │   │   ├── lettre_prompt.py
 │   │       │   │   └── relance_prompt.py
-│   │       │   ├── schemas.py               # → inclut GuideData, GuidePhase, etc.
-│   │       │   ├── guide_validator.py       # → nouveau (validation + fallbacks)
+│   │       │   ├── schemas.py
+│   │       │   ├── guide_validator.py
 │   │       │   ├── orchestrator.py
 │   │       │   ├── cache.py
 │   │       │   ├── json_repair.py
@@ -176,57 +174,53 @@ candidatia/
 │   │       │   ├── gemini.py
 │   │       │   ├── mistral.py
 │   │       │   └── cohere.py
-│   │       ├── auth/     # bcrypt, JWT, users, quotas
+│   │       ├── auth/     # password, jwt, user (+mark_paid_tier), quota (+QuotaExceededError), dependencies
 │   │       ├── email/    # Brevo + templates
-│   │       ├── generation/  # Word CV/Lettre/Guide/Relance + PackBuilder
-│   │       │   ├── word_cv.py
+│   │       ├── generation/
+│   │       │   ├── style.py                 # +ajouter_filigrane_diagonal()
+│   │       │   ├── word_cv.py               # +_safe_join_items +filigrane
+│   │       │   ├── word_guide.py            # +filigrane
 │   │       │   ├── word_lettre.py
-│   │       │   ├── word_guide.py            # → générateur dense 8 phases (GUIDE-v2)
 │   │       │   ├── word_relance.py
 │   │       │   ├── pack_builder.py
 │   │       │   ├── pdf_export.py
-│   │       │   ├── style.py
 │   │       │   └── base.py
 │   │       ├── ingestion/ # extracteurs multi-format
-│   │       ├── language/ # détection + locale_map (enrichi conventions entretien)
-│   │       ├── payment/  # FedaPay + Flutterwave + Raenest + orchestrateur + plans
-│   │       │   ├── plans.py                 # → à réécrire pour PRICING-v2
-│   │       │   ├── orchestrator.py
+│   │       ├── language/ # détection + locale_map (conventions entretien)
+│   │       ├── payment/
+│   │       │   ├── plans.py                 # 5 plans B2C (PRICING-v2)
+│   │       │   ├── orchestrator.py          # +mark_paid_tier()
 │   │       │   ├── fedapay.py
 │   │       │   ├── flutterwave.py
 │   │       │   ├── raenest.py
 │   │       │   ├── base.py
 │   │       │   └── schemas.py
 │   │       └── relance/  # service + scheduler
-│   ├── scripts/          # schema.sql, init_db.py, test_*.py
-│   └── tests/            # 176+ tests
+│   ├── scripts/          # schema.sql, init_db.py, verify-pricing-v2.py, test_*.py
+│   └── tests/            # 189+ tests (test_pricing_v2.py inclus)
 ├── frontend/             # Next.js 14
 │   ├── app/[locale]/
-│   │   ├── page.tsx               # Landing enrichie
-│   │   ├── login/, register/      # Auth
-│   │   ├── dashboard/             # Espace utilisateur
-│   │   │   ├── page.tsx           # Accueil (stats)
-│   │   │   ├── generate/          # Générateur
-│   │   │   ├── history/           # Historique enrichi (fix-historique)
-│   │   │   ├── relances/          # Relances
-│   │   │   └── billing/           # Paiement (5 plans à venir : PRICING-v2)
-│   │   ├── billing/return/        # Retour de paiement
-│   │   └── legal/
-│   │       ├── terms/             # CGU
-│   │       ├── privacy/           # Confidentialité
-│   │       └── cookies/           # Cookies
+│   │   ├── page.tsx               # Landing 5 plans B2C
+│   │   ├── login/, register/
+│   │   ├── dashboard/
+│   │   │   ├── page.tsx
+│   │   │   ├── generate/          # +encart QuotaExceededBanner
+│   │   │   ├── history/
+│   │   │   ├── relances/
+│   │   │   └── billing/           # 5 plans dynamiques (fix array)
+│   │   └── legal/ (terms, privacy, cookies)
 │   ├── components/
 │   │   ├── ui/                    # Button, Input, Card, Alert, Toast, Spinner
 │   │   ├── Layout/                # Header, Sidebar, Footer, LanguageSwitcher
 │   │   ├── relance/               # RelanceCard, ScheduleModal
-│   │   ├── billing/               # PlanCard, PaymentMethods
+│   │   ├── billing/               # PlanCard (5 plans + badge), PaymentMethods
 │   │   └── Legal/                 # CookieBanner
 │   ├── lib/                       # api.ts, store.ts, supabase.ts, utils.ts
-│   ├── messages/                  # fr.json, en.json
+│   ├── messages/                  # fr.json, en.json (5 plans + quota section)
 │   └── vercel.json
 ├── docs/                 # context.md, architecture.md
 ├── ops/                  # runbook, monitoring
-└── scripts/setup/        # setup-phase*.js (historique du projet)
+└── scripts/              # setup-phase*.js, pricing-v2-phase*.js (historique)
 ```
 
 ### 3.3 Endpoints backend
@@ -248,21 +242,21 @@ candidatia/
 
 | Table | Rôle | Statut |
 |---|---|---|
-| `profiles` | Utilisateurs (id, email, password_hash, credits, plan, locale) | ✅ |
-| `generations` | Historique des packs (user_id, score, paths, langues) | ✅ (fix appliqué) |
+| `profiles` | Utilisateurs (id, email, password_hash, credits, plan, **is_free_tier**, locale) | ✅ |
+| `generations` | Historique des packs (user_id, score, paths, langues) | ✅ |
 | `payments` | Paiements (provider, transaction_id, amount, status, credits) | ✅ |
 | `relances` | Relances programmables (user_id, scheduled_date, email_draft, status) | ✅ |
 | `ai_logs` | Monitoring des appels IA (provider, tokens, latency, success) | ✅ |
 
-**RLS** : activé sur toutes les tables, bypassé par `service_role` (clé utilisée par le backend). Aucune policy n'est requise pour le bon fonctionnement tant qu'on passe par l'admin client.
+**RLS** : activé sur toutes les tables, bypassé par `service_role`.
 
-Schéma SQL : `backend/scripts/schema.sql` (créé via Supabase SQL Editor).
+Schéma SQL : `backend/scripts/schema.sql` (colonne `is_free_tier` + migration idempotente).
 
 ---
 
-## 5. MODÈLE ÉCONOMIQUE (v2 — à appliquer)
+## 5. MODÈLE ÉCONOMIQUE (v2 — appliqué)
 
-### 5.1 Grille tarifaire validée (2026-10-14)
+### 5.1 Grille tarifaire (PRICING-v2)
 
 | Plan | Code | Prix EUR | Prix XOF | Prix USD | Crédits | Cible |
 |---|---|---|---|---|---|---|
@@ -271,7 +265,7 @@ Schéma SQL : `backend/scripts/schema.sql` (créé via Supabase SQL Editor).
 | ⭐ Candidature Active | `active` | 7,50 € | 5 000 FCFA | 8,50 $ | 5 | Best-seller |
 | 🚀 Recherche Intensive | `intensive` | 18 € | 12 000 FCFA | 20 $ | 15 | Engagement |
 | 💎 Pro Illimité | `pro_unlimited` | 22 €/mois | 15 000 FCFA/mois | 25 $/mois | Illimité | Récurrent |
-| 🏢 B2B | `b2b` | Sur devis | Sur devis | Sur devis | Volume | Écoles / ONG (Phase 10) |
+| 🏢 B2B | `b2b` | Sur devis | Sur devis | Sur devis | Volume | Phase 10 |
 
 ### 5.2 Différenciation fonctionnelle (Phase B — à venir)
 
@@ -283,7 +277,7 @@ Schéma SQL : `backend/scripts/schema.sql` (créé via Supabase SQL Editor).
 | 🚀 Recherche Intensive | ✅ | ✅ | ✅ | prioritaire |
 | 💎 Pro Illimité | ✅ | ✅ | ✅ | VIP |
 
-**Note** : en Phase A (immédiate), la différenciation fonctionnelle n'est PAS appliquée. Tous les plans payants donnent accès aux mêmes fonctionnalités. La différenciation sera appliquée en Phase B après avoir observé les usages réels.
+**Note** : en Phase A (actuelle), la différenciation n'est PAS appliquée. Tous les plans payants donnent accès aux mêmes fonctionnalités.
 
 ### 5.3 Canaux de paiement
 - **FedaPay** : Mobile Money (MTN MoMo, Moov, Celtiis) + carte bancaire locale
@@ -292,10 +286,12 @@ Schéma SQL : `backend/scripts/schema.sql` (créé via Supabase SQL Editor).
 - **Encaissement** : tout au Bénin
 
 ### 5.4 Filigrane sur plan gratuit
-Les packs générés par un utilisateur en plan `free` (Découverte) auront un discret filigrane en bas de page :
-> *"Généré gratuitement avec CandidatIA — candidatia.com"* (italique gris clair)
+Les packs générés par un utilisateur en plan `free` portent un **filigrane diagonal VML** en arrière-plan :
+> *"CandidatIA - Genere gratuitement - candidatia.com"*
 
-Ce filigrane disparaît dès qu'un pack est acheté (Express ou supérieur).
+**Caractéristiques** : rotation 315°, taille 60pt, opacité 0.55, couleur #808080, occupant ~50% de la page.
+
+Ce filigrane disparaît dès qu'un pack est acheté (`mark_paid_tier()` appelé automatiquement après paiement réussi).
 
 ---
 
@@ -320,11 +316,11 @@ Ce filigrane disparaît dès qu'un pack est acheté (Express ou supérieur).
 ### 6.3 Architecture technique
 - **Prompt enrichi** : `backend/app/services/ai/prompts/guide_prompt.py`
 - **Validator + fallback** : `backend/app/services/ai/guide_validator.py`
-- **Schémas Pydantic** : `GuideData`, `GuidePhase`, `GuideQuestion`, `GuidePiege`, etc. dans `schemas.py`
-- **Générateur Word dense** : `backend/app/services/generation/word_guide.py` (format 10-15 pages, mise en forme experte)
+- **Schémas Pydantic** : `GuideData`, `GuidePhase`, `GuideQuestion`, `GuidePiege`, etc.
+- **Générateur Word dense** : `backend/app/services/generation/word_guide.py` (10-15 pages)
 
 ### 6.4 Adaptation culturelle
-Chaque `locale_map` contient maintenant :
+Chaque `locale_map` contient :
 - `interview_style` : collaboratif, direct, hiérarchique, etc.
 - `interview_duration_minutes` : 45 min (US) → 90 min (JP)
 - `salary_negotiation_style` : direct, indirect, jamais abordé
@@ -344,18 +340,18 @@ CandidatIA est soumise au **Code du numérique du Bénin (Loi n° 2017-20 du 20 
 
 | Obligation | Base légale | Statut |
 |---|---|---|
-| Privacy Policy (droits utilisateurs) | Art. 437-448 | ✅ Publiée |
+| Privacy Policy | Art. 437-448 | ✅ Publiée |
 | CGU (dont exception rétractation) | Art. 347-354 | ✅ Publiée |
 | Politique cookies | Art. 383 | ✅ Publiée |
-| Cookie banner (consentement) | Art. 383 | ✅ Implémenté |
+| Cookie banner | Art. 383 | ✅ Implémenté |
 | Déclaration APDP | Art. 405 | ⏳ À faire |
-| Registre des activités de traitement | Art. 435 | ⏳ À faire |
-| Rapport annuel APDP (avant 30 juin) | Art. 387 | ⏳ À venir |
-| Consentement marketing préalable | Art. 330-332 | ⏳ À implémenter |
-| Contrats de sous-traitance | Art. 426 | ⏳ À faire |
-| Encadrement transferts hors Bénin | Art. 391+ | ⏳ À documenter |
+| Registre des traitements | Art. 435 | ⏳ À faire |
+| Rapport annuel APDP | Art. 387 | ⏳ À venir |
+| Consentement marketing | Art. 330-332 | ⏳ À implémenter |
+| Contrats sous-traitance | Art. 426 | ⏳ À faire |
+| Transferts hors Bénin | Art. 391+ | ⏳ À documenter |
 
-### 7.3 Droits utilisateurs à garantir
+### 7.3 Droits utilisateurs
 - **Accès** : réponse ≤ 60 jours
 - **Opposition** (prospection) : réponse ≤ 30 jours
 - **Rectification / Suppression** : réponse ≤ 45 jours
@@ -379,20 +375,20 @@ SECRET_KEY=<32+ caractères>
 JWT_ALGORITHM=HS256
 JWT_EXPIRATION_MINUTES=60
 
-# IA (ordre de fallback)
-GROQ_API_KEY=<clé>            # recommandé : clé principale valide
+# IA
+GROQ_API_KEY=<clé>
 GEMINI_API_KEY=<clé>
 MISTRAL_API_KEY=<clé>
-COHERE_API_KEY=<clé>          # ⚠️ actuellement invalide → régénérer
+COHERE_API_KEY=<clé>          # ⚠️ actuellement invalide
 AI_PROVIDER_ORDER=groq,gemini,mistral,cohere
 
 # Supabase
 SUPABASE_URL=https://uftodzmoktbxbgfdotgn.supabase.co
 SUPABASE_ANON_KEY=<clé>
-SUPABASE_SERVICE_KEY=<clé>    # utilisé par le backend (bypass RLS)
-DATABASE_URL=postgresql://postgres.xxx:xxx@...
+SUPABASE_SERVICE_KEY=<clé>
+DATABASE_URL=postgresql://...
 
-# Redis (⚠️ actuellement indisponible → debug recommandé)
+# Redis (⚠️ actuellement indisponible)
 REDIS_URL=redis://localhost:6379
 
 # Brevo
@@ -400,7 +396,7 @@ BREVO_API_KEY=<clé>
 BREVO_SENDER_EMAIL=<email vérifié>
 BREVO_SENDER_NAME=CandidatIA
 
-# FedaPay (sandbox actif, testé)
+# FedaPay
 FEDAPAY_SECRET_KEY=sk_sandbox_xxx
 FEDAPAY_PUBLIC_KEY=pk_sandbox_xxx
 FEDAPAY_ENV=sandbox
@@ -458,26 +454,30 @@ npm run dev
 
 ### 9.3 Tests
 ```powershell
-# Backend
 cd backend
 pytest -m "not integration"
 pytest -m integration -v
+pytest tests/test_pricing_v2.py -v
+python scripts\verify-pricing-v2.py
 ```
 
 ---
 
 ## 10. DÉCISIONS D'ARCHITECTURE
 
-1. **Orchestrateur IA multi-provider** : résilience (les modèles gratuits changent), performance, économie (cache).
-2. **FedaPay en priorité** : encaissement au Bénin, couverture Mobile Money, frais bas.
+1. **Orchestrateur IA multi-provider** : résilience, performance, économie (cache).
+2. **FedaPay en priorité** : encaissement au Bénin, couverture Mobile Money.
 3. **Scheduler en mode "pull"** : compatible avec tous les hébergeurs, protégé par token.
 4. **Texte sans accents dans le code** : contournement des problèmes d'encodage Windows.
 5. **Fallback OCR en cascade** : pypdf → pdfplumber → Tesseract + PyMuPDF.
-6. **Titres Word traduits par dictionnaire** : `TITLES`, `CV_TITLES`, `LETTRE_TITLES`, `RELANCE_TITLES`.
-7. **Sauvegarde systématique après génération** : toute génération réussie insère une ligne dans `generations` (fix du 2026-10-14).
-8. **Validator + fallback guide** : si l'IA omet des sections du guide, le validator les enrichit avec des templates contextualisés.
-9. **Grille tarifaire 5 plans B2C** : Découverte (gratuit) + Express + Candidature Active + Recherche Intensive + Pro Illimité.
-10. **Filigrane sur plan gratuit** : incite à l'achat tout en permettant un test complet.
+6. **Titres Word traduits par dictionnaire** : `CV_TITLES`, `LETTRE_TITLES`, `RELANCE_TITLES`.
+7. **Sauvegarde systématique après génération** : toute génération réussie insère une ligne dans `generations` (`_save_generation()`).
+8. **Validator + fallback guide** : si l'IA omet des sections, le validator les enrichit.
+9. **Grille tarifaire 5 plans B2C** : Découverte + Express + Candidature Active + Recherche Intensive + Pro Illimité.
+10. **Filigrane diagonal VML** : rotation 315°, opacity 0.55, couleur #808080, taille 60pt.
+11. **Encart UX "Quota épuisé"** : `402 QUOTA_EXCEEDED` avec 2 CTA (recharger / voir plans).
+12. **`_safe_join_items()`** : tolère les listes de strings OU de dicts retournées par l'IA.
+13. **`mark_paid_tier()`** : retire automatiquement le filigrane après un paiement réussi.
 
 ---
 
@@ -485,36 +485,19 @@ pytest -m integration -v
 
 | Dette | Impact | Priorité |
 |---|---|---|
-| Redis indisponible (`redis_unavailable`) | Élevé (pas de cache IA → coût + latence) | 🔴 Haute |
-| Clé Cohere invalide (401) | Moyen (fallback fonctionne sur Groq) | 🟡 Moyenne |
+| Redis indisponible (`redis_unavailable`) | Élevé (pas de cache IA) | 🔴 Haute |
+| Clé Cohere invalide (401) | Moyen (fallback Groq fonctionne) | 🟡 Moyenne |
 | Warnings Pydantic V2 (`json_encoders`, `Config`) | Aucun | Basse |
 | `test_*.py` à la racine backend (obsolètes) | Aucun | Basse |
 | Absence de rate limiting avancé | Moyen | Moyenne |
 | Pas de tests frontend (Jest/Playwright) | Moyen | Moyenne |
 | Différenciation fonctionnelle par plan non implémentée | Moyen | Moyenne (Phase B) |
-| Filigrane plan gratuit non implémenté | Moyen | Haute (PRICING-v2) |
-| Plan Pro Illimité non implémenté (abonnement manuel) | Moyen | Haute (PRICING-v2) |
 | Aucun endpoint de téléchargement d'un ancien pack | Bas | Basse |
 | Pagination/filtres sur l'historique | Bas | Basse |
 
 ---
 
 ## 12. PROCHAINES ÉTAPES
-
-### Phase PRICING-v2 — Nouvelle grille tarifaire
-- [ ] Backup automatique des fichiers concernés
-- [ ] Réécriture de `plans.py` avec les 5 plans (Découverte, Express, Candidature Active, Recherche Intensive, Pro Illimité)
-- [ ] Alignement de `quota_service.py` (PLAN_QUOTAS)
-- [ ] Ajout du champ `is_free_tier` dans `user.py` + migration SQL
-- [ ] Nouveau user a `is_free_tier = true` par défaut
-- [ ] Filigrane conditionnel dans `word_cv.py` et `word_guide.py`
-- [ ] Propagation du flag dans `pack_builder.py` et `generation.py`
-- [ ] Mise à jour de la landing (`page.tsx`) avec les 5 plans
-- [ ] Mise à jour des traductions (`fr.json`, `en.json`)
-- [ ] Mise à jour de `billing/page.tsx` (5 plans au lieu de 3)
-- [ ] Mise à jour de `PlanCard.tsx` (support 5 plans + badge)
-- [ ] Mise à jour de `context.md`
-- [ ] Script de validation `verify-pricing-v2.py`
 
 ### Phase 8 — Déploiement production
 - [ ] Backend sur Render.com (Web Service + Cron Job)
@@ -551,7 +534,7 @@ pytest -m integration -v
 | Provider IA tombe | Élevé | Fallback cascade + circuit breaker |
 | Sanction APDP | Élevé | Déclaration + registre + conformité |
 | FedaPay/Flutterwave refuse KYC | Élevé | Backup Paystack + CinetPay |
-| Abus free tier | Élevé | 1 pack unique + email vérifié + fingerprint |
+| Abus free tier | Élevé | 1 pack unique + email vérifié + filigrane |
 | Coût IA explose | Moyen | Cache Redis (à réparer) + monitoring `ai_logs` |
 | Attaque DDoS | Faible | Vercel + Render + Cloudflare |
 
@@ -559,8 +542,8 @@ pytest -m integration -v
 
 ## 14. RESSOURCES
 
-- **Repo** : local (C:\Users\togninoubi.aho\Desktop\projets\CandidatIA\candidatia)
-- **Tags Git** : `phase-6-complete`, `fix-history`, `pricing-v2-pending`
+- **Repo** : local (`C:\Users\togninoubi.aho\Desktop\projets\CandidatIA\candidatia`)
+- **Tags Git** : `phase-7e-complete`, `fix-history`, `pricing-v2-applied`, `fix-watermark`, `fix-quota-ux`
 - **Supabase** : https://uftodzmoktbxbgfdotgn.supabase.co
 - **FedaPay** : https://dashboard.fedapay.com
 - **Render** : https://dashboard.render.com (à venir)
@@ -581,7 +564,7 @@ pytest -m integration -v
 | 0.6.0 | 2026-10-01 | Phase 6 : Relance + scheduler + emails |
 | 0.7.0 | 2026-10-01 | Phase 7 : Frontend complet |
 | 0.8.0 | 2026-10-01 | Phase 7e-legal + Conformité Bénin identifiée |
-| **0.9.0** | **2026-10-14** | **Fix historique + Guide enrichi 8 phases + Nouvelle grille tarifaire** |
+| **0.9.0** | **2026-10-15** | **PRICING-v2 appliqué (5 plans B2C) + Filigrane diagonal + Encart Quota UX** |
 
 ---
 
@@ -590,36 +573,61 @@ pytest -m integration -v
 
 ---
 
-## 📋 Récapitulatif des changements dans cette version 0.9.0
+## ✅ Procédure
 
-| Section | Changement |
-|---|---|
-| **En-tête** | Version 0.8.0 → **0.9.0** |
-| **2.1 Roadmap** | Ajout des phases `FIX-historique`, `FIX-billing`, `GUIDE-v2`, `PRICING-v2` |
-| **2.2 Capacités** | Ajout : guide 8 phases, validator, historique sauvegardé, mapping culturel entretien |
-| **3.2 Structure** | Ajout de `guide_validator.py` et annotations des fichiers modifiés |
-| **4. DB** | Note sur RLS et bypass par `service_role` |
-| **5. Modèle économique** | **Refonte complète** : 5 plans B2C + tableau de différenciation fonctionnelle + filigrane |
-| **6. Guide enrichi (NOUVEAU)** | Section entièrement nouvelle documentant GUIDE-v2 |
-| **7. Conformité** | Inchangé (Phase 9 à venir) |
-| **10. Décisions** | Ajout des décisions 7, 8, 9, 10 (sauvegarde, validator, pricing, filigrane) |
-| **11. Dettes** | Ajout : Redis, Cohere, différenciation fonctionnelle, filigrane, Pro Illimité |
-| **12. Prochaines étapes** | Ajout de la section PRICING-v2 détaillée + Phase 10 étendue B2B |
-| **13. Risques** | Ajout : abus free tier |
-| **15. Historique** | Version 0.9.0 documentée |
+### 1. Écraser `docs/context.md`
+
+Dans VS Code, ouvre `candidatia/docs/context.md`, **sélectionne tout** (`Ctrl+A`), **supprime**, puis **colle** le contenu ci-dessus.
+
+**Sauvegarde** (`Ctrl+S`).
+
+### 2. Vérifier
+
+```powershell
+Get-Content docs\context.md | Select-Object -First 15
+```
+
+**Attendu** :
+```
+# context.md — Contexte global du projet CandidatIA
+
+> **Version** : 0.9.0
+> **Dernière mise à jour** : 2026-10-15
+...
+```
+
+### 3. Commit Git
+
+```powershell
+git add docs/context.md
+git commit -m "docs: context.md v0.9.0 (PRICING-v2 + filigrane diagonal + quota UX)"
+```
 
 ---
 
-## 🚀 Prochaine action
+## 📊 Ce qui a changé dans cette v0.9.0
 
-Ce fichier `context.md` est prêt à être **copié dans `docs/context.md`** et commité :
+| Section | Changement |
+|---|---|
+| **En-tête** | Version + date + tags Git mis à jour |
+| **2.1 Roadmap** | `PRICING-v2`, `FIX-watermark`, `FIX-quota-ux` marqués ✅ |
+| **2.2 Capacités** | Ajout : 5 plans B2C, filigrane diagonal, encart quota UX |
+| **3.2 Structure** | Ajout : `verify-pricing-v2.py`, `_safe_join_items`, `mark_paid_tier`, `QuotaExceededError` |
+| **5.4 Filigrane** | Description technique complète (rotation 315°, opacity 0.55, #808080) |
+| **10. Décisions** | Ajout décisions 10, 11, 12, 13 |
+| **11. Dettes** | Retiré "Différenciation Phase B" (fait), "Filigrane" (fait), "Pro Illimité" (fait) |
+| **15. Historique** | v0.9.0 documentée avec date du 2026-10-15 |
 
-```powershell
-# Depuis la racine du projet
-Copy-Item "chemin\vers\ce\fichier.md" "docs\context.md" -Force
+---
 
-git add docs/context.md
-git commit -m "docs: context.md v0.9.0 (fix historique + guide enrichi + pricing v2)"
-```
+## 🎯 État final du projet
 
-Une fois ce commit fait, **dis-moi "go PRICING-v2"** et je te livre le script `setup-pricing-v2.js` complet et testé pour appliquer la nouvelle grille tarifaire.
+**PRICING-v2 est 100% appliqué et validé.** Le projet est prêt pour :
+
+| Étape | Contenu |
+|---|---|
+| **Phase 8** | Déploiement production (Vercel + Render) |
+| **Phase 9** | Conformité APDP |
+| **Phase 10** | Marketing + B2B |
+
+Dis-moi quand `docs/context.md` est à jour et on attaque **Phase 8** (déploiement) ou une autre priorité selon ton choix.

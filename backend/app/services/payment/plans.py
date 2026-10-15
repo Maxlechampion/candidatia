@@ -1,80 +1,98 @@
 """
-Definition des plans tarifaires CandidatIA.
+Definition des plans tarifaires CandidatIA - PRICING-v2
+
+5 plans B2C. Le plan free applique un filigrane.
 """
 from typing import Any, Dict, List, Optional
 
 
 PLANS: Dict[str, Dict[str, Any]] = {
-    "essentiel": {
-        "code": "essentiel",
-        "name": "Essentiel",
-        "credits": 50,
-        "price_eur": 7.50,
-        "description": "Ideal pour debuter : 50 credits pour decouvrir CandidatIA.",
+    "free": {
+        "code": "free",
+        "name": "Decouverte",
+        "description": "Testez CandidatIA avec 1 pack offert",
+        "price_xof": 0,
+        "price_eur": 0,
+        "price_usd": 0,
+        "credits": 1,
+        "is_free": True,
         "features": [
-            "50 credits IA",
-            "Correction de CV",
-            "Simulation d'entretien",
-            "Support email",
+            "1 pack unique",
+            "CV + Lettre + Guide",
+            "Filigrane CandidatIA",
+            "Sans engagement",
         ],
         "highlight": False,
     },
-    "pro": {
-        "code": "pro",
-        "name": "Pro",
-        "credits": 150,
-        "price_eur": 18.00,
-        "description": "Le plus populaire : 150 credits pour une recherche active.",
+    "express": {
+        "code": "express",
+        "name": "Express",
+        "description": "1 pack sans filigrane pour une candidature ciblee",
+        "price_xof": 2000,
+        "price_eur": 3.00,
+        "price_usd": 3.50,
+        "credits": 1,
+        "is_free": False,
         "features": [
-            "150 credits IA",
-            "Tout Essentiel +",
-            "Lettres de motivation",
-            "Optimisation LinkedIn",
-            "Support prioritaire",
+            "1 pack de candidature",
+            "Sans filigrane",
+            "CV methode STAR",
+            "Lettre personnalisee",
+        ],
+        "highlight": False,
+    },
+    "active": {
+        "code": "active",
+        "name": "Candidature Active",
+        "description": "5 packs pour une recherche active",
+        "price_xof": 5000,
+        "price_eur": 7.50,
+        "price_usd": 8.50,
+        "credits": 5,
+        "is_free": False,
+        "features": [
+            "5 packs de candidature",
+            "Sans filigrane",
+            "Guide d entretien enrichi",
+            "Relances automatiques",
         ],
         "highlight": True,
     },
-    "carriere": {
-        "code": "carriere",
-        "name": "Carriere",
-        "credits": 400,
-        "price_eur": 38.00,
-        "description": "Pour les candidats ambitieux : 400 credits + coaching.",
+    "intensive": {
+        "code": "intensive",
+        "name": "Recherche Intensive",
+        "description": "15 packs pour une recherche soutenue",
+        "price_xof": 12000,
+        "price_eur": 18.00,
+        "price_usd": 20.00,
+        "credits": 15,
+        "is_free": False,
         "features": [
-            "400 credits IA",
-            "Tout Pro +",
-            "Coaching carriere 1-to-1",
-            "Acces illimite aux modeles",
+            "15 packs de candidature",
+            "Sans filigrane",
+            "Guide d entretien enrichi",
+            "Relances automatiques",
+            "Coaching IA",
+        ],
+        "highlight": False,
+    },
+    "pro_unlimited": {
+        "code": "pro_unlimited",
+        "name": "Pro Illimite",
+        "description": "Packs illimites + coaching premium (mensuel)",
+        "price_xof": 15000,
+        "price_eur": 22.00,
+        "price_usd": 25.00,
+        "credits": 999999,
+        "is_free": False,
+        "features": [
+            "Packs illimites",
+            "Coaching IA premium",
+            "Guide enrichi 8 phases",
             "Support VIP",
         ],
         "highlight": False,
     },
-}
-
-
-PROVIDER_PRICES: Dict[str, Dict[str, float]] = {
-    "fedapay": {
-        "essentiel": 5000,
-        "pro": 12000,
-        "carriere": 25000,
-    },
-    "flutterwave": {
-        "essentiel": 5000,
-        "pro": 12000,
-        "carriere": 25000,
-    },
-    "raenest": {
-        "essentiel": 8.00,
-        "pro": 19.50,
-        "carriere": 41.00,
-    },
-}
-
-
-PROVIDER_CURRENCY: Dict[str, str] = {
-    "fedapay": "XOF",
-    "flutterwave": "XOF",
-    "raenest": "USD",
 }
 
 
@@ -95,21 +113,28 @@ def get_price_for_provider(plan_code: str, provider_name: str) -> float:
 
     if plan_code not in PLANS:
         raise ValueError(f"Plan inconnu : {plan_code}")
-    if provider_name not in PROVIDER_PRICES:
-        raise ValueError(f"Provider inconnu : {provider_name}")
 
-    price = PROVIDER_PRICES[provider_name].get(plan_code)
-    if price is None:
-        raise ValueError(
-            f"Prix non defini pour plan={plan_code} provider={provider_name}"
-        )
-    return float(price)
+    plan = PLANS[plan_code]
+
+    if provider_name == "fedapay":
+        return float(plan["price_xof"])
+    if provider_name == "flutterwave":
+        return float(plan["price_eur"])
+    if provider_name == "raenest":
+        return float(plan["price_usd"])
+
+    raise ValueError(f"Provider inconnu : {provider_name}")
 
 
 def get_currency_for_provider(provider_name: str) -> str:
     """Retourne la devise utilisee par un provider."""
     provider_name = provider_name.lower()
-    currency = PROVIDER_CURRENCY.get(provider_name)
+    mapping = {
+        "fedapay": "XOF",
+        "flutterwave": "EUR",
+        "raenest": "USD",
+    }
+    currency = mapping.get(provider_name)
     if not currency:
         raise ValueError(f"Devise inconnue pour provider : {provider_name}")
     return currency
@@ -121,7 +146,7 @@ def format_price(amount: float, currency: str) -> str:
     if currency == "XOF":
         return f"{int(amount):,}".replace(",", " ") + " FCFA"
     if currency == "USD":
-        return f"${amount:.2f}"
+        return "$" + f"{amount:.2f}"
     if currency == "EUR":
-        return f"{amount:.2f} €"
+        return f"{amount:.2f} EUR"
     return f"{amount:.2f} {currency}"

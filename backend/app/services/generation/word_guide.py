@@ -13,6 +13,7 @@ from docx.shared import Pt, RGBColor
 from app.core.logging import get_logger
 from app.services.generation.base import DocumentGenerator
 from app.services.generation.style import (
+    ajouter_filigrane_diagonal,
     ALIGN_CENTRE,
     ALIGN_JUSTIFIE,
     COULEUR_PRIMAIRE,
@@ -206,6 +207,8 @@ def _ajouter_question_bloc(
 # ============================================================
 # GENERATEUR
 # ============================================================
+
+
 
 class WordGuideGenerator(DocumentGenerator):
     name = "word_guide"
@@ -561,5 +564,9 @@ class WordGuideGenerator(DocumentGenerator):
             nb_pieges=len(pieges),
             has_synthese=bool(synthese),
         )
+
+        # Filigrane pour les utilisateurs gratuits
+        if locale.get("apply_watermark", False):
+            ajouter_filigrane_diagonal(doc, "CandidatIA - Genere gratuitement - candidatia.com", taille_pt=60, opacite="0.15")
 
         return doc

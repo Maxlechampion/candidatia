@@ -160,6 +160,9 @@ async def generate_pack(
 
     # 2. Conventions culturelles
     locale = get_locale_conventions(output_language)
+    # Propagation du flag free tier pour le filigrane
+    is_free = bool(user.get("is_free_tier", user.get("plan", "free") == "free"))
+    locale["apply_watermark"] = is_free
     logger.info("locale_resolved", language=output_language, country=locale.get("country"))
 
     orchestrator = get_orchestrator()
@@ -283,6 +286,11 @@ async def generate_pack(
     )
 
 
+
+    try:
+        _save_generation(user_id, cv_data, locale, result)
+    except Exception as _e:
+        logger.warning("save_generation_wrapper_failed", error=str(_e))
 
     logger.info("generate_success", user_id=user_id, zip_path=zip_path)
 
